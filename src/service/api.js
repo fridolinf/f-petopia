@@ -1,4 +1,4 @@
-const baseUrl = 'https://petopia-b.herokuapp.com/api/v1';
+const baseUrl = 'http://localhost:3001/api/v1';
 export const api = {
 	getUser: (id) => `${baseUrl}/users/${id}`,
 	getProducts: (id, location) => `${baseUrl}/products/${id}/${location}`,
