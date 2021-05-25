@@ -20,6 +20,7 @@ import {
 	ProfileOutlined,
 } from '@ant-design/icons';
 import { session } from '../utils/session';
+import logo from '../assets/images/logo.jpeg';
 
 const { Header, Sider, Content } = Layout;
 
@@ -74,9 +75,9 @@ class LayoutAdmin extends React.Component {
 							</a>
 						) : (
 							<div className='ml-2 d-flex mb-2'>
-								<Avatar className='mt-3 mr-3' size={40}></Avatar>
+								<Avatar className='mt-3 mr-3' size={40} src={logo}></Avatar>
 								<span style={{ marginTop: 20 }}>
-									<Text style={{ color: 'black' }}>Nama Toko</Text>
+									<Text style={{ color: 'black' }}>ADMIN</Text>
 								</span>
 							</div>
 						)}

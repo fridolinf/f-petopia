@@ -7,4 +7,6 @@ export const api = {
 	addProducts: (id) => `${baseUrl}/products/supplier/tambahproduk/${id}`,
 	updateProducts: (id) => `${baseUrl}/products/supplier/updateproduk/${id}`,
 	getCategories: `${baseUrl}/categories`,
+	getSupplierDetail: (id) => `${baseUrl}/kelolauser/detail/${id}`,
+	delUser: (id) => `${baseUrl}/kelolauser/${id}`,
 };

@@ -1,28 +1,18 @@
 import React from 'react';
 import { Button, Table, Modal, Space, Tag, Alert } from 'antd';
 import { SweetAlert } from '../../../components/SweetAlert';
+import {
+	getDataUsers,
+	getDataUsersSupplier,
+	getDetailSupplier,
+	delUser,
+} from '../../../redux/admin/action/actionAdmin';
+import { connect } from 'react-redux';
+import DetailSupplier from './modal/DetailSupplier';
+import swal from 'sweetalert';
 
 const sorter = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
-
-export const data = [
-	{
-		key: '1',
-		nama_produk: 'Sumbira',
-		deskripsi: 'Ini adalah makanan kucing',
-		gambar:
-			'https://images.tokopedia.net/img/cache/500-square/VqbcmM/2020/10/20/075af1ad-f3de-4bda-8563-cdc2bbae0550.jpg.webp?ect=4g ',
-		gambars:
-			'https://images.tokopedia.net/img/cache/500-square/VqbcmM/2020/10/20/075af1ad-f3de-4bda-8563-cdc2bbae0550.jpg.webp?ect=4g',
-		merk: 'Whiskas',
-		harga: 'Rp.100.000',
-		kategori: 'Makanan Kucing',
-		stok: '30',
-		rating: '4.5',
-		status: ['tersedia'],
-		tanggal_dibuat: '07/11/2021',
-	},
-];
 
 class KelolaUser extends React.Component {
 	constructor(props) {
@@ -33,6 +23,11 @@ class KelolaUser extends React.Component {
 			isModalEditHabis: false,
 			isModalDetailHabis: false,
 		};
+	}
+
+	componentDidMount() {
+		this.props.getDataUsers();
+		this.props.getDataUsersSupplier();
 	}
 
 	showModal1Habis = () => {
@@ -47,41 +42,32 @@ class KelolaUser extends React.Component {
 		this.setState({ isModalEditHabis: true });
 	};
 
-	showDetailHabis = () => {
-		this.setState({ isModalDetailHabis: true });
+	showDetailHabis = (id) => {
+		this.setState({
+			isModalDetailHabis: true,
+		});
+		this.props.getDetailSupplier(id);
 	};
 
-	alertTambah = () => {
-		return (
-			<Alert
-				message='Info Text'
-				description='Info Description Info Description Info Description Info Description'
-				type='info'
-				action={
-					<Space direction='vertical'>
-						<Button size='small' type='primary'>
-							Accept
-						</Button>
-						<Button size='small' danger type='ghost'>
-							Decline
-						</Button>
-					</Space>
-				}
-				closable
-			/>
-		);
-	};
+	delNotification = (id) => {
+		swal({
+			title: 'Apakah anda yakin?',
+			text: 'User akan dihapus!',
+			icon: 'warning',
+			buttons: true,
+			dangerMode: true,
+		}).then((willDelete) => {
+			if (willDelete) {
+				this.props.delUser(id);
+				swal('User berhasil dihapus', {
+					icon: 'success',
+				});
 
-	openNotification = () => {
-		SweetAlert(
-			'apakah anda yakin ?',
-			'Item ini akan di post',
-			true,
-			true,
-			true,
-			'Item telah di Post',
-			'Baik, terimakasih'
-		);
+				this.setState({ isModalAddProduk: false });
+			} else {
+				swal('baik terimakasih');
+			}
+		});
 	};
 
 	handleOk = () => {
@@ -101,105 +87,117 @@ class KelolaUser extends React.Component {
 	render() {
 		const { isModalEditHabis, isModalDetailHabis } = this.state;
 
-		// Table Habis Pakai
-		const columnsHabisPakai = [
+		// Table Users
+		const columnUsers = [
 			{
-				title: 'Nama Produk',
-				dataIndex: 'nama_produk',
-				key: 'Nama Produk',
-				sorter: (a, b) => sorter(a.nama_produk, b.nama_produk),
+				title: 'Nama',
+				dataIndex: 'name',
+				key: 'name',
+				sorter: (a, b) => sorter(a.name, b.name),
 				sortDirections: ['descend', 'ascend'],
 			},
 			{
-				title: 'Deskripsi',
-				dataIndex: 'deskripsi',
-				key: 'deskripsi',
+				title: 'Email',
+				dataIndex: 'email',
+				key: 'email',
 			},
 			{
-				title: 'Gambar',
-				dataIndex: 'gambar',
-				key: 'gambar',
-				render: (gambar) => <img width={50} src={gambar} alt={'gambar'}></img>,
-			},
-			{
-				title: 'Gambars',
-				dataIndex: 'gambars',
-				key: 'gambars',
-				render: (gambars) => (
-					<img width={50} src={gambars} alt={'gambars'}></img>
-				),
-			},
-			{
-				title: 'Merk',
-				dataIndex: 'merk',
-				key: 'merk',
-				sorter: (a, b) => sorter(a.merk, b.merk),
+				title: 'No Hp',
+				dataIndex: 'phone',
+				key: 'phone',
+				sorter: (a, b) => sorter(a.phone, b.phone),
 				sortDirections: ['descend', 'ascend'],
 			},
 			{
-				title: 'Harga',
-				dataIndex: 'harga',
-				key: 'Harga',
-				sorter: (a, b) => sorter(a.harga, b.harga),
+				title: 'Alamat',
+				dataIndex: 'address',
+				key: 'address',
+				sorter: (a, b) => sorter(a.address, b.address),
 				sortDirections: ['descend', 'ascend'],
-			},
-			{
-				title: 'Kategori',
-				dataIndex: 'kategori',
-				key: 'kategori',
-				sorter: (a, b) => sorter(a.kategori, b.kategori),
-				sortDirections: ['descend', 'ascend'],
-			},
-			{
-				title: 'Stok',
-				dataIndex: 'stok',
-				key: 'Stok',
-				sorter: (a, b) => sorter(a.stok, b.stok),
-				sortDirections: ['descend', 'ascend'],
-			},
-			{
-				title: 'Rating',
-				dataIndex: 'rating',
-				key: 'rating',
-				sorter: (a, b) => sorter(a.rating, b.rating),
-			},
-			{
-				title: 'Status',
-				dataIndex: 'status',
-				key: 'status',
-				render: (status_pengiriman) => (
-					<>
-						{status_pengiriman.map((tag) => {
-							let color = tag.length === 8 ? 'green' : 'volcano';
-							return (
-								<Tag color={color} key={tag}>
-									{tag.toUpperCase()}
-								</Tag>
-							);
-						})}
-					</>
-				),
 			},
 			{
 				title: 'Tanggal_dibuat',
-				dataIndex: 'tanggal_dibuat',
-				key: 'tanggal_dibuat',
-				sorter: (a, b) => sorter(a.tanggal_dibuat, b.tanggal_dibuat),
+				dataIndex: 'dateCreated',
+				key: 'dateCreated',
+				sorter: (a, b) => sorter(a.dateCreated, b.dateCreated),
 				sortDirections: ['descend', 'ascend'],
 			},
 			{
 				title: 'Aksi',
 				dataIndex: 'aksi',
 				key: 'Aksi',
-				render: () => (
+				render: (text, record) => (
 					<Space size='small' direction='vertical'>
-						<button className='btn btn-danger'>Delete</button>
 						<button className='btn btn-warning' onClick={this.showEditHabis}>
 							Edit
 						</button>
-						<button className='btn btn-info' onClick={this.showDetailHabis}>
+						<button
+							className='btn btn-danger'
+							onClick={(e) => {
+								e.stopPropagation();
+								this.delNotification(record.id);
+							}}
+						>
+							Delete
+						</button>
+					</Space>
+				),
+			},
+		];
+		// Table Admin
+		const columnAdmin = [
+			{
+				title: 'Nama',
+				dataIndex: 'name',
+				key: 'name',
+				sorter: (a, b) => sorter(a.name, b.name),
+				sortDirections: ['descend', 'ascend'],
+			},
+			{
+				title: 'Email',
+				dataIndex: 'email',
+				key: 'email',
+			},
+			{
+				title: 'No Hp',
+				dataIndex: 'phone',
+				key: 'phone',
+				sorter: (a, b) => sorter(a.phone, b.phone),
+				sortDirections: ['descend', 'ascend'],
+			},
+			{
+				title: 'Alamat',
+				dataIndex: 'address',
+				key: 'address',
+				sorter: (a, b) => sorter(a.address, b.address),
+				sortDirections: ['descend', 'ascend'],
+			},
+			{
+				title: 'Tanggal_dibuat',
+				dataIndex: 'dateCreated',
+				key: 'dateCreated',
+				sorter: (a, b) => sorter(a.dateCreated, b.dateCreated),
+				sortDirections: ['descend', 'ascend'],
+			},
+			{
+				title: 'Aksi',
+				dataIndex: 'aksi',
+				key: 'Aksi',
+				render: (text, record) => (
+					<Space size='small' direction='vertical'>
+						<button className='btn btn-warning' onClick={this.showEditHabis}>
+							Edit
+						</button>
+						<button
+							className='btn btn-info'
+							onClick={(e) => {
+								e.stopPropagation();
+								this.showDetailHabis(record.id);
+							}}
+						>
 							Detail
 						</button>
+						<button className='btn btn-danger'>Delete</button>
 					</Space>
 				),
 			},
@@ -208,7 +206,7 @@ class KelolaUser extends React.Component {
 		return (
 			<div>
 				<h4 className='my-3'>Data User</h4>
-				<Table columns={columnsHabisPakai} dataSource={data} />
+				<Table columns={columnUsers} dataSource={this.props.users} />
 
 				{/* Modal Edit Habis  */}
 				<Modal
@@ -228,7 +226,7 @@ class KelolaUser extends React.Component {
 
 				{/*  */}
 				<h4 className='my-3'>Data Supplier</h4>
-				<Table columns={columnsHabisPakai} dataSource={data} />
+				<Table columns={columnAdmin} dataSource={this.props.usersSupplier} />
 
 				{/* Modal Edit Habis  */}
 				<Modal
@@ -240,14 +238,32 @@ class KelolaUser extends React.Component {
 
 				{/* Modal Detail Habis */}
 				<Modal
-					title='Detail Produk'
+					width='50%'
+					title='Detail Supplier'
 					visible={isModalDetailHabis}
 					onOk={this.handleOk}
 					onCancel={this.handleCancel}
-				></Modal>
+				>
+					<DetailSupplier data={this.props.supplierDetail} />
+				</Modal>
 			</div>
 		);
 	}
 }
 
-export default KelolaUser;
+const mapStateToProps = (state) => {
+	const {
+		users,
+		usersSupplier,
+		supplierDetail,
+		loading,
+		error,
+	} = state.reducerAdmin;
+	return { users, usersSupplier, supplierDetail, loading, error };
+};
+export default connect(mapStateToProps, {
+	getDataUsers,
+	getDataUsersSupplier,
+	getDetailSupplier,
+	delUser,
+})(KelolaUser);
