@@ -1,5 +1,5 @@
 import React from 'react';
-import { Descriptions, Image } from 'antd';
+import { Descriptions } from 'antd';
 
 const DetailSupplier = (props) => {
 	let data = props.data;

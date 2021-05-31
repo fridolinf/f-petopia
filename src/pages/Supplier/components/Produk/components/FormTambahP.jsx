@@ -97,17 +97,31 @@ const FormTambahP = (props) => {
 					style={{ backgroundColor: '#ffffff' }}
 					className='mb-4'
 				>
-					<Form.Item name='description' className='mt-1 justify-content-center'>
+					<Form.Item
+						name='description'
+						className='mt-1 justify-content-center'
+						rules={[
+							{
+								required: true,
+								message: 'Deskripsi harus diisi!',
+							},
+							{
+								min: 20,
+								message: 'Nama Produk harus lebih dari 20 huruf',
+							},
+							{
+								max: 100,
+								message: 'Deskripsi produk tidak bisa lebih dari 100 huruf',
+							},
+						]}
+						a
+					>
 						<TextArea showCount maxLength={100} size='large' />
 					</Form.Item>
 				</List>
 
 				<List
-					header={
-						<div>
-							Deskripsi Penuh<span style={{ color: 'red' }}>*</span>
-						</div>
-					}
+					header={<div>Deskripsi Penuh</div>}
 					size='small'
 					bordered
 					style={{ backgroundColor: '#ffffff' }}
@@ -117,7 +131,7 @@ const FormTambahP = (props) => {
 						name='richDescription'
 						className='mt-1 justify-content-center'
 					>
-						<TextArea showCount maxLength={500} size='large' />
+						<TextArea size='large' />
 					</Form.Item>
 				</List>
 
@@ -130,11 +144,21 @@ const FormTambahP = (props) => {
 					size='small'
 					bordered
 				>
-					<Row gutter={[24, 8]} justify='start' className='mt-4'>
-						<Col xs={{ span: 5, offset: 1 }} lg={{ span: 4, offset: 2 }}>
-							<Form.Item name='image1' extra='Logo'>
+					<Row gutter={24} justify='center' className='mt-4'>
+						<Col className='gutter-row '>
+							<Form.Item
+								name='image1'
+								rules={[
+									{
+										required: true,
+										message: 'Logo harus harus diisi!',
+									},
+								]}
+								a
+							>
 								<Upload
 									listType='picture-card'
+									className='avatar-uploader'
 									showUploadList={false}
 									beforeUpload={props.beforeUpload}
 									onChange={props.handleChange1}
@@ -152,7 +176,7 @@ const FormTambahP = (props) => {
 								</Upload>
 							</Form.Item>
 						</Col>
-						<Col xs={{ span: 5, offset: 1 }} lg={{ span: 3, offset: 2 }}>
+						<Col className='gutter-row '>
 							<Form.Item name='image2'>
 								<Upload
 									listType='picture-card'
@@ -174,7 +198,7 @@ const FormTambahP = (props) => {
 								</Upload>
 							</Form.Item>
 						</Col>
-						<Col xs={{ span: 5, offset: 1 }} lg={{ span: 3, offset: 2 }}>
+						<Col className='gutter-row mt-4'>
 							<Form.Item name='image3'>
 								<Upload
 									listType='picture-card'
@@ -196,7 +220,7 @@ const FormTambahP = (props) => {
 								</Upload>
 							</Form.Item>
 						</Col>
-						<Col xs={{ span: 5, offset: 1 }} lg={{ span: 3, offset: 2 }}>
+						<Col className='gutter-row mt-4'>
 							<Form.Item name='image4'>
 								<Upload
 									listType='picture-card'
@@ -232,7 +256,21 @@ const FormTambahP = (props) => {
 					style={{ backgroundColor: '#ffffff' }}
 					className='mt-4 mb-4'
 				>
-					<Form.Item className='mt-1 justify-content-center' name='brand'>
+					<Form.Item
+						className='mt-1 justify-content-center'
+						name='brand'
+						rules={[
+							{
+								required: true,
+								message: 'Merk harus diisi!',
+							},
+							{
+								min: 3,
+								message: 'Merk harus diisi minimal 3 huruf atau angka',
+							},
+						]}
+						a
+					>
 						<Input />
 					</Form.Item>
 				</List>
@@ -248,7 +286,21 @@ const FormTambahP = (props) => {
 					style={{ backgroundColor: '#ffffff' }}
 					className='mt-4 mb-4'
 				>
-					<Form.Item name='price' className='mt-1 justify-content-center'>
+					<Form.Item
+						name='price'
+						className='mt-1 justify-content-center'
+						rules={[
+							{
+								required: true,
+								message: 'Harga harus diisi!',
+							},
+							{
+								pattern: new RegExp(/^[0-9]+$/),
+								message: 'Harga harus diisi dengan Angka',
+							},
+						]}
+						a
+					>
 						<Input />
 					</Form.Item>
 				</List>
@@ -264,7 +316,17 @@ const FormTambahP = (props) => {
 					style={{ backgroundColor: '#ffffff' }}
 					className='mt-4 mb-4'
 				>
-					<Form.Item className='mt-1 justify-content-center' name='category'>
+					<Form.Item
+						className='mt-1 justify-content-center'
+						name='category'
+						rules={[
+							{
+								required: true,
+								message: 'Kategori harus diisi!',
+							},
+						]}
+						a
+					>
 						<Select style={{ width: '100%' }}>
 							{selector.categories &&
 								selector.categories.map((row) => (
@@ -288,8 +350,19 @@ const FormTambahP = (props) => {
 					<Form.Item
 						className='mt-1 justify-content-center'
 						name='countInStock'
+						rules={[
+							{
+								required: true,
+								message: 'Stok harus diisi!',
+							},
+							{
+								pattern: new RegExp(/^[0-9]+$/),
+								message: 'Stok harus diisi dengan Angka',
+							},
+						]}
+						a
 					>
-						<InputNumber style={{ width: '100%' }} />
+						<Input style={{ width: '100%' }} />
 					</Form.Item>
 				</List>
 

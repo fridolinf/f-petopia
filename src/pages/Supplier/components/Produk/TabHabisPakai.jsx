@@ -210,6 +210,7 @@ class TabHabisPakai extends React.Component {
 			isModalDetailHabis: false,
 		});
 	};
+
 	handleCancelEdit = () => {
 		this.setState({
 			isModalEditHabis: false,
@@ -304,7 +305,7 @@ class TabHabisPakai extends React.Component {
 			},
 			{
 				title: 'Tanggal_dibuat',
-				dataIndex: 'dateCreated',
+				dataIndex: 's',
 				key: 'dateCreated',
 				sorter: (a, b) => sorter(a.dateCreated, b.dateCreated),
 				sortDirections: ['descend', 'ascend'],

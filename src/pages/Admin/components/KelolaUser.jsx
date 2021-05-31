@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Table, Modal, Space, Tag, Alert } from 'antd';
-import { SweetAlert } from '../../../components/SweetAlert';
+import { Table, Modal, Space } from 'antd';
 import {
 	getDataUsers,
 	getDataUsersSupplier,
@@ -225,7 +224,7 @@ class KelolaUser extends React.Component {
 				></Modal>
 
 				{/*  */}
-				<h4 className='my-3'>Data Supplier</h4>
+				<h4 className='my-3'>Data Pemilik Toko</h4>
 				<Table columns={columnAdmin} dataSource={this.props.usersSupplier} />
 
 				{/* Modal Edit Habis  */}

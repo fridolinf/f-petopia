@@ -1,119 +1,183 @@
 import React from 'react';
-import { Button, Table, Modal, Space, Alert } from 'antd';
-import { SweetAlert } from '../../../components/SweetAlert';
-import TambahArtikel from './modal/TambahArtikel';
+import { Button, Table, Modal, Space, message } from 'antd';
+import {
+	addArtikel,
+	delArtikel,
+	getDataArtikel,
+	getDetailArtikel,
+	updateArtikel,
+} from '../../../redux/admin/action/actionAdmin';
+import { connect } from 'react-redux';
+import swal from 'sweetalert';
+import UIBlocker from 'react-ui-blocker';
+import TambahArtikel from './modal/FormTambahArtikel';
+import FormEditArtikel from './modal/FormEditArtikel';
+import FormDetailArtikel from './modal/FormDetailArtikel';
 
 const sorter = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
 
-export const data = [
-	{
-		key: '1',
-		no: '1',
-		judul: 'Sumbira',
-		isi: 'Ini adalah makanan kucing',
-		gambar:
-			'https://images.tokopedia.net/img/cache/500-square/VqbcmM/2020/10/20/075af1ad-f3de-4bda-8563-cdc2bbae0550.jpg.webp?ect=4g ',
-		tanggal_dibuat: '07/11/2021',
-	},
-];
+const getBase64 = (img, callback) => {
+	const reader = new FileReader();
+	reader.addEventListener('load', () => callback(reader.result));
+	reader.readAsDataURL(img);
+	return false;
+};
+
+const beforeUpload = (file) => {
+	const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+	if (!isJpgOrPng) {
+		message.error('You can only upload JPG/PNG file!');
+	}
+	const isLt2M = file.size / 1024 / 1024 < 2;
+	if (!isLt2M) {
+		message.error('Image must smaller than 2MB!');
+	}
+	return isJpgOrPng && isLt2M;
+};
 
 class KelolaArtikel extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isModalAddProduk: false,
-			isModalKategoriProduk: false,
-			isModalEditHabis: false,
-			isModalDetailHabis: false,
+			isModalAddArtikel: false,
+			isModalEditArtikel: false,
+			isModalDetailArtikel: false,
+			loading: false,
+			imageUrl1: '',
+			dateCreated: '',
+			id: '',
 		};
 	}
 
-	showModal1Habis = () => {
-		this.setState({ isModalAddProduk: true });
+	componentDidMount() {
+		this.props.getDataArtikel();
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.artikel !== this.props.artikel) {
+			this.setState({
+				imageUrl1: nextProps.artikel.image1,
+				dateCreated: nextProps.artikel.dateCreated,
+			});
+		}
+	}
+
+	showModal1Artikel = () => {
+		this.setState({ isModalAddArtikel: true });
 	};
 
-	showModal2Habis = () => {
-		this.setState({ isModalKategoriProduk: true });
+	showEditArtikel = (id) => {
+		this.setState({ isModalEditArtikel: true, id: id });
+		this.props.getDetailArtikel(id);
 	};
 
-	showEditHabis = () => {
-		this.setState({ isModalEditHabis: true });
+	showDetailArtikel = (id) => {
+		this.setState({ isModalDetailArtikel: true, id: id });
+		this.props.getDetailArtikel(id);
 	};
 
-	showDetailHabis = () => {
-		this.setState({ isModalDetailHabis: true });
+	// Tambah Data
+	onSubmitHandler = (value) => {
+		let data = {
+			title: value.title,
+			description: value.description,
+			isi: value.isi,
+			image1: this.state.imageUrl1,
+		};
+		this.setState({ isModalAddArtikel: false });
+		this.props.addArtikel(data);
 	};
 
-	alertTambah = () => {
-		return (
-			<Alert
-				message='Info Text'
-				description='Info Description Info Description Info Description Info Description'
-				type='info'
-				action={
-					<Space direction='vertical'>
-						<Button size='small' type='primary'>
-							Accept
-						</Button>
-						<Button size='small' danger type='ghost'>
-							Decline
-						</Button>
-					</Space>
-				}
-				closable
-			/>
-		);
+	// Edit Data
+	onSubmitHandlerEdit = (value) => {
+		let data = {
+			title: value.title,
+			description: value.description,
+			isi: value.isi,
+			image1: this.state.imageUrl1,
+		};
+		this.setState({ isModalEditArtikel: false });
+		this.props.updateArtikel(data, this.state.id);
 	};
 
-	openNotification = () => {
-		SweetAlert(
-			'apakah anda yakin ?',
-			'Item ini akan di post',
-			true,
-			true,
-			true,
-			'Item telah di Post',
-			'Baik, terimakasih'
-		);
+	// Handle image 1
+	handleChangeImage1 = async (info) => {
+		if (info.file.status === 'uploading') {
+			this.setState({ loading: true });
+			return;
+		}
+		if (info.file.status === 'done') {
+			// Get this url from response in real world.
+			await getBase64(info.file.originFileObj, (imageUrl) => {
+				this.setState({ loading: false, imageUrl1: imageUrl });
+			});
+		}
+	};
+
+	delNotification = (id) => {
+		swal({
+			title: 'Apakah anda yakin?',
+			text: 'Artikel akan dihapus!',
+			icon: 'warning',
+			buttons: true,
+			dangerMode: true,
+		}).then((willDelete) => {
+			if (willDelete) {
+				this.props.delArtikel(id);
+				swal('Artikel berhasil dihapus', {
+					icon: 'success',
+				});
+
+				this.setState({ isModalAddArtikel: false });
+			} else {
+				swal('baik terimakasih');
+			}
+		});
 	};
 
 	handleOk = () => {
 		this.setState({
-			isModalAddProduk: false,
-			isModalKategoriProduk: false,
-			isModalEditHabis: false,
-			isModalDetailHabis: false,
+			isModalEditArtikel: false,
+			isModalDetailArtikel: false,
 		});
 	};
 
 	handleCancel = () => {
 		this.setState({
-			isModalAddProduk: false,
-			isModalKategoriProduk: false,
-			isModalEditHabis: false,
-			isModalDetailHabis: false,
+			isModalAddArtikel: false,
+			isModalEditArtikel: false,
+			isModalDetailArtikel: false,
+		});
+	};
+
+	handleCancelEdit = () => {
+		this.setState({
+			isModalEditArtikel: false,
+			imageUrl1: '',
 		});
 	};
 
 	render() {
-		const { isModalAddProduk, isModalEditHabis } = this.state;
+		const {
+			isModalAddArtikel,
+			isModalEditArtikel,
+			isModalDetailArtikel,
+		} = this.state;
 
-		// Table Habis Pakai
-		const columnsHabisPakai = [
+		// Table Artikel
+		const columnsArtikel = [
 			{
-				title: 'No',
-				dataIndex: 'no',
-				key: 'no',
-				sorter: (a, b) => sorter(a.no, b.no),
+				title: 'Judul',
+				dataIndex: 'title',
+				key: 'title',
+				sorter: (a, b) => sorter(a.title, b.title),
 				sortDirections: ['descend', 'ascend'],
 			},
 			{
-				title: 'Judul',
-				dataIndex: 'judul',
-				key: 'judul',
-				sorter: (a, b) => sorter(a.nama_produk, b.nama_produk),
-				sortDirections: ['descend', 'ascend'],
+				title: 'Deskripsi',
+				dataIndex: 'description',
+				key: 'description',
 			},
 			{
 				title: 'Isi',
@@ -122,28 +186,48 @@ class KelolaArtikel extends React.Component {
 			},
 			{
 				title: 'Gambar',
-				dataIndex: 'gambar',
-				key: 'gambar',
-				render: (gambar) => <img width={50} src={gambar} alt={'gambar'}></img>,
+				dataIndex: 'image1',
+				key: 'image1',
+				render: (image1) => <img width={50} src={image1} alt={'gambar'}></img>,
 			},
 			{
 				title: 'Tanggal_dibuat',
-				dataIndex: 'tanggal_dibuat',
-				key: 'tanggal_dibuat',
-				sorter: (a, b) => sorter(a.tanggal_dibuat, b.tanggal_dibuat),
+				dataIndex: 'dateCreated',
+				key: 'dateCreated',
+				sorter: (a, b) => sorter(a.dateCreated, b.dateCreated),
 				sortDirections: ['descend', 'ascend'],
 			},
 			{
 				title: 'Aksi',
 				dataIndex: 'aksi',
 				key: 'Aksi',
-				render: () => (
+				render: (text, record) => (
 					<Space size='small' direction='horizontal'>
-						<button className='btn btn-danger'>Delete</button>
-						<button className='btn btn-warning' onClick={this.showEditHabis}>
+						<button
+							className='btn btn-danger'
+							onClick={(e) => {
+								e.stopPropagation();
+								this.delNotification(record.id);
+							}}
+						>
+							Delete
+						</button>
+						<button
+							className='btn btn-warning'
+							onClick={(e) => {
+								e.stopPropagation();
+								this.showEditArtikel(record.id);
+							}}
+						>
 							Edit
 						</button>
-						<button className='btn btn-info' onClick={this.showDetailHabis}>
+						<button
+							className='btn btn-info'
+							onClick={(e) => {
+								e.stopPropagation();
+								this.showDetailArtikel(record.id);
+							}}
+						>
 							Detail
 						</button>
 					</Space>
@@ -153,34 +237,80 @@ class KelolaArtikel extends React.Component {
 
 		return (
 			<div>
+				<UIBlocker
+					theme='bounce' // default
+					isVisible={this.props.loading}
+					message=''
+				/>
 				<div style={{ marginRight: '10rem' }} className='mb-3'>
-					<Button className=' btn-info' onClick={this.showModal1Habis}>
+					<Button className=' btn-info' onClick={this.showModal1Artikel}>
 						Tambah Artikel
 					</Button>
 				</div>
 
 				<h4 className='my-3'>Data Artikel</h4>
-				<Table columns={columnsHabisPakai} dataSource={data} />
+				<Table columns={columnsArtikel} dataSource={this.props.artikels} />
 
-				{/* Modal Habis Pakai */}
+				{/* Modal Detail Artikel */}
 				<Modal
-					title='Tambah Produk'
-					visible={isModalAddProduk}
-					onOk={this.openNotification}
-					onCancel={this.handleCancel}
-				>
-					<TambahArtikel />
-				</Modal>
-
-				{/* Modal Edit Habis  */}
-				<Modal
-					title='Edit Produk'
-					visible={isModalEditHabis}
+					width='50%'
+					title='Detail Artikel'
+					visible={isModalDetailArtikel}
 					onOk={this.handleOk}
 					onCancel={this.handleCancel}
-				></Modal>
+				>
+					<FormDetailArtikel data={this.props.artikel} />
+				</Modal>
+
+				{/* Modal Artikel */}
+				<Modal
+					title='Tambah Artikel'
+					visible={isModalAddArtikel}
+					footer={null}
+					width={750}
+					closable={false}
+				>
+					<TambahArtikel
+						onCancel={this.handleCancel}
+						onConfirm={this.onSubmitHandler}
+						loading={this.state.loading}
+						imageUrl1={this.state.imageUrl1}
+						beforeUpload={beforeUpload}
+						handleChange1={this.handleChangeImage1}
+					/>
+				</Modal>
+
+				{/* Modal Edit Artikel  */}
+				<Modal
+					title='Edit Artikel'
+					visible={isModalEditArtikel}
+					footer={null}
+					width={750}
+					closable={false}
+				>
+					<FormEditArtikel
+						onCancel={this.handleCancelEdit}
+						onConfirm={this.onSubmitHandlerEdit}
+						loading={this.state.loading}
+						imageUrl1={this.state.imageUrl1}
+						dateCreated={this.state.dateCreated}
+						beforeUpload={beforeUpload}
+						handleChange1={this.handleChangeImage1}
+						data={this.props.artikel}
+					/>
+				</Modal>
 			</div>
 		);
 	}
 }
-export default KelolaArtikel;
+const mapStateToProps = (state) => {
+	const { artikels, artikel, loading, error } = state.reducerAdmin;
+	return { artikels, artikel, loading, error };
+};
+export default connect(mapStateToProps, {
+	addArtikel,
+	delArtikel,
+	getDataArtikel,
+	getDetailArtikel,
+	updateArtikel,
+})(KelolaArtikel);

@@ -209,6 +209,7 @@ class TabPetGrooming extends React.Component {
 
 	handleCancel = () => {
 		this.setState({
+			isModalAddProduk: false,
 			isModalEditGrooming: false,
 			isModalDetailGrooming: false,
 		});

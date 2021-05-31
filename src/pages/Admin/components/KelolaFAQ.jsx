@@ -1,115 +1,123 @@
 import React from 'react';
-import { Button, Table, Modal, Space, Alert } from 'antd';
-import { SweetAlert } from '../../../components/SweetAlert';
+import { Button, Table, Modal, Space } from 'antd';
 import TambahFaq from './modal/TambahFaq';
+import {
+	addFaq,
+	getDataFaq,
+	delFaq,
+	getDetailFaq,
+	updateFaq,
+} from '../../../redux/admin/action/actionAdmin';
+import { connect } from 'react-redux';
+import swal from 'sweetalert';
+import UIBlocker from 'react-ui-blocker';
+import DetailFaq from './modal/DetailFaq';
+import FormEditFaq from './modal/FormEditFaq';
 
 const sorter = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
-
-export const data = [
-	{
-		key: '1',
-		no: '1',
-		pertanyaan: 'Sumbira',
-		jawaban: 'Ini adalah makanan kucing',
-	},
-];
 
 class KelolaFAQ extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isModalAddProduk: false,
-			isModalKategoriProduk: false,
-			isModalEditHabis: false,
-			isModalDetailHabis: false,
+			loading: false,
+			isModalAddFaq: false,
+			isModalEditFaq: false,
+			isModalDetailFaq: false,
 		};
 	}
+	componentDidMount() {
+		this.props.getDataFaq();
+	}
 
-	showModal1Habis = () => {
-		this.setState({ isModalAddProduk: true });
+	showModal1Faq = () => {
+		this.setState({ isModalAddFaq: true });
 	};
 
-	showModal2Habis = () => {
-		this.setState({ isModalKategoriProduk: true });
+	showEditFaq = (id) => {
+		this.setState({ isModalEditFaq: true, id: id });
+		this.props.getDetailFaq(id);
 	};
 
-	showEditHabis = () => {
-		this.setState({ isModalEditHabis: true });
+	showDetailFaq = (id) => {
+		this.setState({
+			isModalDetailFaq: true,
+		});
+		this.props.getDetailFaq(id);
 	};
 
-	showDetailHabis = () => {
-		this.setState({ isModalDetailHabis: true });
+	// Tambah Data
+	onSubmitHandler = (value) => {
+		let data = {
+			pertanyaan: value.pertanyaan,
+			jawaban: value.jawaban,
+		};
+		this.setState({ isModalAddFaq: false });
+		this.props.addFaq(data);
 	};
 
-	alertTambah = () => {
-		return (
-			<Alert
-				message='Info Text'
-				description='Info Description Info Description Info Description Info Description'
-				type='info'
-				action={
-					<Space direction='vertical'>
-						<Button size='small' type='primary'>
-							Accept
-						</Button>
-						<Button size='small' danger type='ghost'>
-							Decline
-						</Button>
-					</Space>
-				}
-				closable
-			/>
-		);
+	// Edit Data
+	onSubmitHandlerEdit = (value) => {
+		let data = {
+			pertanyaan: value.pertanyaan,
+			jawaban: value.jawaban,
+		};
+		this.setState({ isModalEditFaq: false });
+		this.props.updateFaq(data, this.state.id);
 	};
 
-	openNotification = () => {
-		SweetAlert(
-			'apakah anda yakin ?',
-			'Item ini akan di post',
-			true,
-			true,
-			true,
-			'Item telah di Post',
-			'Baik, terimakasih'
-		);
+	handleCancelEdit = () => {
+		this.setState({
+			isModalEditFaq: false,
+		});
+	};
+
+	delNotification = (id) => {
+		swal({
+			title: 'Apakah anda yakin?',
+			text: 'FAQ akan dihapus!',
+			icon: 'warning',
+			buttons: true,
+			dangerMode: true,
+		}).then((willDelete) => {
+			if (willDelete) {
+				this.props.delFaq(id);
+				swal('FAQ berhasil dihapus', {
+					icon: 'success',
+				});
+
+				this.setState({ isModalAddFaq: false });
+			} else {
+				swal('baik terimakasih');
+			}
+		});
 	};
 
 	handleOk = () => {
 		this.setState({
-			isModalAddProduk: false,
-			isModalKategoriProduk: false,
-			isModalEditHabis: false,
-			isModalDetailHabis: false,
+			isModalEditFaq: false,
+			isModalDetailFaq: false,
 		});
 	};
 
 	handleCancel = () => {
 		this.setState({
-			isModalAddProduk: false,
-			isModalKategoriProduk: false,
-			isModalEditHabis: false,
-			isModalDetailHabis: false,
+			isModalAddFaq: false,
+			isModalEditFaq: false,
+			isModalDetailFaq: false,
 		});
 	};
 
 	render() {
-		const { isModalAddProduk, isModalEditHabis } = this.state;
+		const { isModalAddFaq, isModalEditFaq, isModalDetailFaq } = this.state;
 
-		// Table Habis Pakai
-		const columnsHabisPakai = [
-			{
-				title: 'No',
-				dataIndex: 'no',
-				key: 'no',
-				sorter: (a, b) => sorter(a.no, b.no),
-				sortDirections: ['descend', 'ascend'],
-			},
+		const columnFaq = [
 			{
 				title: 'Pertanyaan',
 				dataIndex: 'pertanyaan',
 				key: 'pertanyaan',
-				sorter: (a, b) => sorter(a.nama_produk, b.nama_produk),
+				sorter: (a, b) => sorter(a.pertanyaan, b.pertanyaan),
 				sortDirections: ['descend', 'ascend'],
 			},
 			{
@@ -118,16 +126,43 @@ class KelolaFAQ extends React.Component {
 				key: 'jawaban',
 			},
 			{
+				title: 'Tanggal_dibuat',
+				dataIndex: 'dateCreated',
+				key: 'dateCreated',
+				sorter: (a, b) => sorter(a.dateCreated, b.dateCreated),
+				sortDirections: ['descend', 'ascend'],
+			},
+			{
 				title: 'Aksi',
 				dataIndex: 'aksi',
 				key: 'Aksi',
-				render: () => (
+				render: (text, record) => (
 					<Space size='small' direction='horizontal'>
-						<button className='btn btn-danger'>Delete</button>
-						<button className='btn btn-warning' onClick={this.showEditHabis}>
+						<button
+							className='btn btn-danger'
+							onClick={(e) => {
+								e.stopPropagation();
+								this.delNotification(record.id);
+							}}
+						>
+							Delete
+						</button>
+						<button
+							className='btn btn-warning'
+							onClick={(e) => {
+								e.stopPropagation();
+								this.showEditFaq(record.id);
+							}}
+						>
 							Edit
 						</button>
-						<button className='btn btn-info' onClick={this.showDetailHabis}>
+						<button
+							className='btn btn-info'
+							onClick={(e) => {
+								e.stopPropagation();
+								this.showDetailFaq(record.id);
+							}}
+						>
 							Detail
 						</button>
 					</Space>
@@ -137,34 +172,72 @@ class KelolaFAQ extends React.Component {
 
 		return (
 			<div>
+				<UIBlocker
+					theme='bounce' // default
+					isVisible={this.props.loading}
+					message=''
+				/>
 				<div style={{ marginRight: '10rem' }} className='mb-3'>
-					<Button className=' btn-info' onClick={this.showModal1Habis}>
+					<Button className=' btn-info' onClick={this.showModal1Faq}>
 						Tambah FAQ
 					</Button>
 				</div>
 
 				<h4 className='my-3'>Data FAQ</h4>
-				<Table columns={columnsHabisPakai} dataSource={data} />
+				<Table columns={columnFaq} dataSource={this.props.faqs} />
 
-				{/* Modal Habis Pakai */}
+				{/* Modal Faq Pakai */}
 				<Modal
-					title='Tambah Produk'
-					visible={isModalAddProduk}
-					onOk={this.openNotification}
-					onCancel={this.handleCancel}
+					title='Tambah FAQ'
+					visible={isModalAddFaq}
+					footer={null}
+					width={750}
+					closable={false}
 				>
-					<TambahFaq />
+					<TambahFaq
+						onCancel={this.handleCancel}
+						onConfirm={this.onSubmitHandler}
+						loading={this.state.loading}
+					/>
 				</Modal>
-
-				{/* Modal Edit Habis  */}
+				{/* Modal Detail Habis */}
 				<Modal
-					title='Edit Produk'
-					visible={isModalEditHabis}
+					width='50%'
+					title='Detail Produk'
+					visible={isModalDetailFaq}
 					onOk={this.handleOk}
 					onCancel={this.handleCancel}
-				></Modal>
+				>
+					<DetailFaq data={this.props.faq} />
+				</Modal>
+
+				{/* Modal Edit Faq  */}
+				<Modal
+					title='Edit FAQ'
+					visible={isModalEditFaq}
+					footer={null}
+					width={750}
+					closable={false}
+				>
+					<FormEditFaq
+						onCancel={this.handleCancelEdit}
+						onConfirm={this.onSubmitHandlerEdit}
+						loading={this.state.loading}
+						data={this.props.faq}
+					/>
+				</Modal>
 			</div>
 		);
 	}
 }
-export default KelolaFAQ;
+const mapStateToProps = (state) => {
+	const { faqs, faq, loading, error } = state.reducerAdmin;
+	return { faqs, faq, loading, error };
+};
+export default connect(mapStateToProps, {
+	getDataFaq,
+	addFaq,
+	delFaq,
+	getDetailFaq,
+	updateFaq,
+})(KelolaFAQ);

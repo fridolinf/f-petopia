@@ -41,7 +41,6 @@ class TabPetHotel extends React.Component {
 		super(props);
 		this.state = {
 			isModalAddProduk: false,
-			isModalKategoriProduk: false,
 			isModalEditHotel: false,
 			isModalDetailHotel: false,
 			loading: false,
@@ -207,7 +206,6 @@ class TabPetHotel extends React.Component {
 
 	handleOk = () => {
 		this.setState({
-			isModalKategoriPetHotel: false,
 			isModalEditHotel: false,
 			isModalDetailHotel: false,
 		});
@@ -215,7 +213,7 @@ class TabPetHotel extends React.Component {
 
 	handleCancel = () => {
 		this.setState({
-			isModalKategoriPetHotel: false,
+			isModalAddProduk: false,
 			isModalEditHotel: false,
 			isModalDetailHotel: false,
 		});
@@ -233,7 +231,6 @@ class TabPetHotel extends React.Component {
 	render() {
 		const {
 			isModalTambahPetHotel,
-			isModalKategoriPetHotel,
 			isModalEditHotel,
 			isModalDetailHotel,
 		} = this.state;
@@ -369,9 +366,6 @@ class TabPetHotel extends React.Component {
 					<Button className=' btn-info' onClick={this.showModal1Hotel}>
 						Tambah Produk
 					</Button>
-					<Button className='ml-2 btn-info' onClick={this.showModal2Hotel}>
-						Tambah Kategori Produk
-					</Button>
 				</div>
 
 				<h4 className='my-3'>Data Produk Pet Hotel</h4>
@@ -399,14 +393,6 @@ class TabPetHotel extends React.Component {
 						handleChange3={this.handleChangeImage3}
 						handleChange4={this.handleChangeImage4}
 					/>
-				</Modal>
-				<Modal
-					title='Tambah Kategori Produk'
-					visible={isModalKategoriPetHotel}
-					onOk={this.openNotification}
-					onCancel={this.handleCancel}
-				>
-					<FormTambahK />
 				</Modal>
 
 				{/* Modal Edit Hotel  */}

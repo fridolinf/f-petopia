@@ -81,6 +81,7 @@ class Login extends Component {
 												message={this.props.error}
 												type='error'
 												showIcon
+												closable
 											/>
 										)}
 										<Form
