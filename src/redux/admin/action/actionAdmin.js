@@ -57,18 +57,34 @@ export const updateArtikel = (data, id) => {
 };
 
 // ORDERS
-export const getOrderList = (status) => {
-	return { type: 'REQUEST_ORDER_LIST', status };
+export const getOrderNewList = (id) => {
+	return { type: 'REQUEST_ORDER_NEW_LIST', id };
 };
-// export const addArtikel = (data) => {
-// 	return { type: 'REQUEST_ADD_ARTIKEL', payload: data };
-// };
-// export const delArtikel = (id) => {
-// 	return { type: 'REQUEST_DELETE_ARTIKEL', id };
-// };
-// export const getDetailArtikel = (id) => {
-// 	return { type: 'REQUEST_DETAIL_ARTIKEL', id };
-// };
-// export const updateArtikel = (data, id) => {
-// 	return { type: 'REQUEST_UPDATE_ARTIKEL', payload: data, id };
-// };
+export const getOrderSentList = (id) => {
+	return { type: 'REQUEST_ORDER_SENT_LIST', id };
+};
+export const getOrderDoneList = (id) => {
+	return { type: 'REQUEST_ORDER_DONE_LIST', id };
+};
+export const confirmOrder = (id) => {
+	return { type: 'REQUEST_CONFIRM_ORDER', id };
+};
+export const sentOrder = (id) => {
+	return { type: 'REQUEST_SENT_ORDER', id };
+};
+export const deleteOrder = (id) => {
+	return { type: 'REQUEST_DELETE_ORDERS', id };
+};
+export const getDetailOrder = (id) => {
+	return { type: 'REQUEST_DETAIL_ORDER', id };
+};
+
+// DASHBOARD
+
+export const getSuccessTransaction = () => {
+	return { type: 'REQUEST_SUCCESS_TRANSACTION' };
+};
+
+export const getAllTransactions = () => {
+	return { type: 'REQUEST_ALL_TRANSACTIONS' };
+};

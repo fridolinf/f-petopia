@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Form, Input, List } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
+import ReactQuill from 'react-quill';
+import Quill from 'quill';
+import ImageCompress from 'quill-image-compress';
+
+Quill.register('modules/imageCompress', ImageCompress);
 
 const TambahFaq = (props) => {
 	const formItemLayout = {
@@ -11,13 +15,70 @@ const TambahFaq = (props) => {
 			span: 14,
 		},
 	};
+
+	const [textE, setTextE] = useState(undefined);
+
+	const handleChange = (value) => {
+		setTextE(value);
+	};
+
 	let onConfirm = props.onConfirm;
 
 	let onCancel = props.onCancel;
 
+	const modules = {
+		imageCompress: {
+			quality: 1, // default
+			maxWidth: 700, // default
+			maxHeight: 500, // default
+			imageType: 'image/jpeg', // default
+			debug: true, // default
+		},
+		toolbar: [
+			[{ header: [1, 2, false] }],
+			['bold', 'italic', 'underline', 'strike', 'blockquote'],
+			[
+				{ list: 'ordered' },
+				{ list: 'bullet' },
+				{ indent: '-1' },
+				{ indent: '+1' },
+			],
+			['link', 'image'],
+			['clean'],
+			[
+				{ align: '' },
+				{ align: 'center' },
+				{ align: 'right' },
+				{ align: 'justify' },
+			],
+		],
+	};
+
+	const formats = [
+		'header',
+		'bold',
+		'italic',
+		'underline',
+		'strike',
+		'blockquote',
+		'list',
+		'bullet',
+		'indent',
+		'link',
+		'image',
+		'align',
+	];
+
 	return (
 		<>
-			<Form {...formItemLayout} onFinish={onConfirm}>
+			<Form
+				{...formItemLayout}
+				initialValues={{
+					pertanyaan: '',
+					jawaban: '',
+				}}
+				onFinish={onConfirm}
+			>
 				<List
 					header={
 						<div>
@@ -35,11 +96,11 @@ const TambahFaq = (props) => {
 						rules={[
 							{
 								required: true,
-								message: 'Nama harus diisi!',
+								message: 'Pertanyaan harus diisi!',
 							},
 							{
-								min: 7,
-								message: 'Nama Produk harus lebih dari 7 huruf',
+								min: 10,
+								message: 'Pertanyaan harus lebih dari 10 huruf',
 							},
 						]}
 						a
@@ -59,8 +120,29 @@ const TambahFaq = (props) => {
 					style={{ backgroundColor: '#ffffff' }}
 					className='mb-4'
 				>
-					<Form.Item name='jawaban' className='mt-1 justify-content-center'>
-						<TextArea showCount maxLength={100} size='large' />
+					<Form.Item
+						name='jawaban'
+						wrapperCol={13}
+						className='mt-1'
+						rules={[
+							{
+								required: true,
+								message: 'Jawaban harus diisi!',
+							},
+							{
+								min: 10,
+								message: 'Jawaban harus lebih dari 10 huruf',
+							},
+						]}
+						a
+					>
+						<ReactQuill
+							value={textE || ''}
+							onChange={(e) => handleChange(e)}
+							theme='snow'
+							modules={modules}
+							formats={formats}
+						/>
 					</Form.Item>
 				</List>
 

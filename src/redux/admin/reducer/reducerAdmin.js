@@ -1,6 +1,13 @@
 const initialState = {
 	users: [],
-	orders: [],
+	newOrders: [],
+	sentOrders: [],
+	doneOrders: [],
+	detailOrder: {},
+	successTransaction: [],
+	totalT: 0,
+	allTransactions: [],
+	completeOrders: [],
 	faq: {
 		pertanyaan: '',
 		jawaban: '',
@@ -25,6 +32,86 @@ const reducerAdmin = (state = initialState, action) => {
 	switch (action.type) {
 		default:
 			return state;
+
+		// Order
+		case 'REQUEST_ORDER_NEW_LIST':
+			return {
+				...state,
+				loading: true,
+				newOrders: [],
+				error: null,
+			};
+		case 'GET_ORDER_NEW_LIST_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				newOrders: action.payload,
+				error: null,
+			};
+		case 'REQUEST_ORDER_SENT_LIST':
+			return {
+				...state,
+				loading: true,
+				sentOrders: [],
+				error: null,
+			};
+		case 'GET_ORDER_SENT_LIST_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				sentOrders: action.payload,
+				error: null,
+			};
+		case 'REQUEST_ORDER_DONE_LIST':
+			return {
+				...state,
+				loading: true,
+				doneOrders: [],
+				error: null,
+			};
+		case 'GET_ORDER_DONE_LIST_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				doneOrders: action.payload,
+				error: null,
+			};
+		case 'REQUEST_CONFIRM_ORDER':
+			return {
+				...state,
+				loading: true,
+				error: null,
+			};
+		case 'GET_CONFIRM_ORDER_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				error: null,
+			};
+		case 'REQUEST_SENT_ORDER':
+			return {
+				...state,
+				loading: true,
+				error: null,
+			};
+		case 'GET_SENT_ORDER_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				error: null,
+			};
+		case 'REQUEST_DELETE_ORDERS':
+			return {
+				...state,
+				loading: true,
+			};
+		case 'DELETE_ORDERS_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				doneOrders: state.doneOrders.filter((item) => item._id !== action.id),
+			};
+
 		// User
 		case 'REQUEST_DATA_USERS':
 			return {
@@ -86,22 +173,6 @@ const reducerAdmin = (state = initialState, action) => {
 					phone: action.payload.phone,
 					marketName: action.payload.marketName,
 				},
-				error: null,
-			};
-
-		// ORDERS
-		case 'REQUEST_ORDER_LIST':
-			return {
-				...state,
-				loading: true,
-				orders: [],
-				error: null,
-			};
-		case 'GET_ORDER_LIST_SUCCESS':
-			return {
-				...state,
-				loading: true,
-				orders: action.payload,
 				error: null,
 			};
 
@@ -282,6 +353,69 @@ const reducerAdmin = (state = initialState, action) => {
 				...state,
 				loading: false,
 				artikel: {},
+				error: null,
+			};
+		case 'REQUEST_SUCCESS_TRANSACTION':
+			return {
+				...state,
+				loading: true,
+				successTransaction: [],
+				error: null,
+			};
+		case 'GET_SUCCESS_TRANSACTION':
+			return {
+				...state,
+				loading: false,
+				successTransaction: action.payload,
+				error: null,
+			};
+		case 'GET_TOTAL_T':
+			return {
+				...state,
+				loading: false,
+				totalT: action.payload.totalT,
+				error: null,
+			};
+		case 'REQUEST_ALL_TRANSACTIONS':
+			return {
+				...state,
+				loading: true,
+				allTransactions: [],
+				error: null,
+			};
+		case 'GET_ALL_TRANSACTIONS_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				allTransactions: action.payload.allTransactions,
+				error: null,
+			};
+		case 'REQUEST_DETAIL_ORDER':
+			return {
+				...state,
+				loading: true,
+				detailOrder: {},
+				error: null,
+			};
+		case 'GET_DETAIL_ORDER_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				detailOrder: {
+					...state.detailOrder,
+					id: action.payload.id,
+					payment: action.payload.payment,
+					name: action.payload.user.name,
+					quantity: action.payload.quantity,
+					totalPrice: action.payload.totalPrice,
+					address: action.payload.address,
+					marketName: action.payload.orderItems[0].product.market.marketName,
+					marketAddress: action.payload.orderItems[0].product.market.alamatToko,
+					produk: action.payload.orderItems[0].product.name,
+					gambar: action.payload.orderItems[0].product.image1,
+					phone: action.payload.phone,
+					dateOrdered: action.payload.dateOrdered,
+				},
 				error: null,
 			};
 	}

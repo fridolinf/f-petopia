@@ -27,6 +27,15 @@ const store = createStore(
 	persistedState,
 	composeEnhancers(applyMiddleware(...middlewares))
 );
+const saveState = (state) => {
+	const serializedState = JSON.stringify(state);
+	localStorage.setItem('state', serializedState);
+};
+store.subscribe(() => {
+	saveState({
+		reducerSupplier: store.getState().reducerSupplier,
+	});
+});
 sagaMiddleware.run(rootSaga);
 
 export default store;

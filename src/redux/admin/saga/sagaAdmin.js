@@ -5,12 +5,65 @@ import { api } from '../../../service/api';
 
 let adminState = (state) => state.reducerAdmin;
 
-// USER
-function* getDataUsers(action) {
+// Dashboard
+
+function* getSuccessTransaction(action) {
+	try {
+		const token = getLoggedInUser().token;
+		const res = yield axios.get(`${api.getSuccessTransaction}`, {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + token,
+			},
+		});
+		const _data = res.data.successTransaction;
+
+		let totalT = 0;
+
+		_data.map((row) => {
+			totalT += row.totalPrice;
+		});
+
+		yield put({
+			type: 'GET_TOTAL_T',
+			payload: { totalT: totalT },
+		});
+		yield put({ type: 'GET_SUCCESS_TRANSACTION', payload: _data });
+		// });
+
+		if (_data === undefined || _data.length === 0) {
+		} else {
+		}
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+function* getAllTransactions(action) {
+	try {
+		const token = getLoggedInUser().token;
+		const res = yield axios.get(`${api.getAllTransactions}`, {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + token,
+			},
+		});
+		yield put({ type: 'GET_ALL_TRANSACTIONS_SUCCESS', payload: res.data });
+	} catch (e) {
+		console.log(e.message);
+	}
+}
+
+// Dashboard
+
+// ORDER
+
+// Detail Order
+function* detailOrder(action) {
 	const token = getLoggedInUser().token;
 	try {
 		const res = yield axios.get(
-			`http://localhost:3001/api/v1/kelolauser/3`,
+			`${api.detailOrder(action.id)}`,
 
 			{
 				headers: {
@@ -19,7 +72,157 @@ function* getDataUsers(action) {
 				},
 			}
 		);
-		yield put({ type: 'GET_DATA_USERS_SUCCESS', payload: res.data });
+		yield put({ type: 'GET_DETAIL_ORDER_SUCCESS', payload: res.data });
+		console.log(res.data);
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+// OrderPending
+function* getOrderNewList(action) {
+	const token = getLoggedInUser().token;
+	try {
+		const res = yield axios.get(
+			`${api.getOrderNewList(getLoggedInUser().marketId)}`,
+
+			{
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: 'Bearer ' + token,
+				},
+			}
+		);
+		yield put({ type: 'GET_ORDER_NEW_LIST_SUCCESS', payload: res.data });
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+// Order Terkirim
+function* getOrderSentList(status) {
+	const token = getLoggedInUser().token;
+	try {
+		const res = yield axios.get(
+			`${api.getOrderSentList(getLoggedInUser().marketId)}`,
+
+			{
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: 'Bearer ' + token,
+				},
+			}
+		);
+		yield put({ type: 'GET_ORDER_SENT_LIST_SUCCESS', payload: res.data });
+		console.log(res.data, 'TERKIRIM');
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+// Order Selesai
+function* getOrderDoneList(status) {
+	const token = getLoggedInUser().token;
+	try {
+		const res = yield axios.get(
+			`${api.getOrderDoneList(getLoggedInUser().marketId)}`,
+
+			{
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: 'Bearer ' + token,
+				},
+			}
+		);
+		yield put({ type: 'GET_ORDER_DONE_LIST_SUCCESS', payload: res.data });
+		console.log(res.data);
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+// Button Konfirmasi
+function* confirmOrder(action) {
+	const token = getLoggedInUser().token;
+	let param = JSON.stringify(action.payload);
+	try {
+		const res = yield axios.put(
+			`${api.confirmOrder(action.id)}`,
+			param,
+
+			{
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: 'Bearer ' + token,
+				},
+			}
+		);
+		yield put({ type: 'GET_CONFIRM_ORDER_SUCCESS', payload: res.data });
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+// Button Kirim
+function* sentOrder(action) {
+	const token = getLoggedInUser().token;
+	let param = JSON.stringify(action.payload);
+	try {
+		const res = yield axios.put(
+			`${api.sentOrder(action.id)}`,
+			param,
+
+			{
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: 'Bearer ' + token,
+				},
+			}
+		);
+		yield put({ type: 'GET_SENT_ORDER_SUCCESS', payload: res.data });
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+function* deleteOrder(action) {
+	const token = getLoggedInUser().token;
+	try {
+		const res = yield axios.delete(
+			`${api.deleteOrder(action.id)}`,
+
+			{
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: 'Bearer ' + token,
+				},
+			}
+		);
+		yield put({ type: 'DELETE_ORDERS_SUCCESS', payload: res.data });
+		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+// BATAS BAWAH ORDER
+
+// USER
+function* getDataUsers(action) {
+	const token = getLoggedInUser().token;
+	try {
+		const res = yield axios.get(
+			`http://localhost:3001/api/v1/kelolauser/false`,
+
+			{
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: 'Bearer ' + token,
+				},
+			}
+		);
+		yield put({ type: 'GET_DATA_USERS_SUCCESS', payload: res.data.data });
+		console.log(res.data);
 	} catch (e) {
 		console.log(e);
 	}
@@ -51,7 +254,7 @@ function* getDataUsersSupplier(action) {
 	const token = getLoggedInUser().token;
 	try {
 		const res = yield axios.get(
-			`http://localhost:3001/api/v1/kelolauser/2`,
+			`http://localhost:3001/api/v1/kelolauser/true`,
 
 			{
 				headers: {
@@ -60,7 +263,10 @@ function* getDataUsersSupplier(action) {
 				},
 			}
 		);
-		yield put({ type: 'GET_DATA_USERS_SUPPLIER_SUCCESS', payload: res.data });
+		yield put({
+			type: 'GET_DATA_USERS_SUPPLIER_SUCCESS',
+			payload: res.data.data,
+		});
 	} catch (e) {
 		console.log(e);
 	}
@@ -79,33 +285,12 @@ function* getDetailSupplier(action) {
 				},
 			}
 		);
-		yield put({ type: 'GET_DETAIL_SUPPLIER', payload: res.data });
 		console.log(res.data);
+		yield put({ type: 'GET_DETAIL_SUPPLIER', payload: res.data });
 	} catch (e) {
 		console.log(e);
 	}
 }
-
-// ORDERS
-// function* getOrderList(action) {
-// 	const token = getLoggedInUser().token;
-// 	let supplier = yield select(supplierState);
-// 	try {
-// 		const res = yield axios.get(
-// 			`${api.getOrderList(getLoggedInUser().marketId, supplier.location)}`,
-
-// 			{
-// 				headers: {
-// 					'Content-Type': 'application/json',
-// 					Authorization: 'Bearer ' + token,
-// 				},
-// 			}
-// 		);
-// 		yield put({ type: 'GET_ORDER_LIST_SUCCESS', payload: res.data });
-// 	} catch (e) {
-// 		console.log(e);
-// 	}
-// }
 
 // Verifikasi
 function* getDataVerifikasi(action) {
@@ -142,7 +327,6 @@ function* tolakDataVerifikasi(action) {
 		);
 		yield put({ type: 'DELETE_FAQ_SUCCESS', payload: res.data });
 		yield* getDataVerifikasi();
-		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
 	} catch (e) {
 		console.log(e);
 	}
@@ -165,7 +349,6 @@ function* accDataVerifikasi(action) {
 		);
 		yield put({ type: 'ACC_VERIFIKASI_SUCCESS', payload: res.data });
 		yield* getDataVerifikasi();
-		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
 	} catch (e) {
 		console.log(e);
 	}
@@ -365,6 +548,37 @@ function* updateArtikel(action) {
 	}
 }
 
+// Watch Order
+function* watchOrderNewList() {
+	yield takeEvery('REQUEST_ORDER_NEW_LIST', getOrderNewList);
+}
+function* watchOrderSentList() {
+	yield takeEvery('REQUEST_ORDER_SENT_LIST', getOrderSentList);
+}
+function* watchOrderDoneList() {
+	yield takeEvery('REQUEST_ORDER_DONE_LIST', getOrderDoneList);
+}
+function* watchConfirmOrder() {
+	yield takeEvery('REQUEST_CONFIRM_ORDER', confirmOrder);
+}
+function* watchSentOrder() {
+	yield takeEvery('REQUEST_SENT_ORDER', sentOrder);
+}
+function* watchDeleteOrder() {
+	yield takeEvery('REQUEST_DELETE_ORDERS', deleteOrder);
+}
+function* watchDetailOrder() {
+	yield takeEvery('REQUEST_DETAIL_ORDER', detailOrder);
+}
+
+// Dasbboard Admin
+function* watchSuccessTransaction() {
+	yield takeEvery('REQUEST_SUCCESS_TRANSACTION', getSuccessTransaction);
+}
+function* watchAllTransactions() {
+	yield takeEvery('REQUEST_ALL_TRANSACTIONS', getAllTransactions);
+}
+
 // Watch User
 function* watchGetDataUsers() {
 	yield takeEvery('REQUEST_DATA_USERS', getDataUsers);
@@ -446,6 +660,15 @@ function* adminSaga() {
 		fork(watchDelArtikel),
 		fork(watchDetailArtikel),
 		fork(watchUpdateArtikel),
+		fork(watchOrderNewList),
+		fork(watchOrderSentList),
+		fork(watchOrderDoneList),
+		fork(watchConfirmOrder),
+		fork(watchSentOrder),
+		fork(watchDeleteOrder),
+		fork(watchSuccessTransaction),
+		fork(watchAllTransactions),
+		fork(watchDetailOrder),
 	]);
 }
 export default adminSaga;

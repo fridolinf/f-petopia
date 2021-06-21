@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, Upload, Row, Col, List } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
+import ReactQuill from 'react-quill';
 
 const FormTambahArtikel = (props) => {
 	const dummyRequest = ({ file, onSuccess }) => {
@@ -30,6 +31,55 @@ const FormTambahArtikel = (props) => {
 		</div>
 	);
 
+	const [textE, setTextE] = useState(undefined);
+
+	const handleChange = (value) => {
+		setTextE(value);
+	};
+
+	const modules = {
+		imageCompress: {
+			quality: 0.7, // default
+			maxWidth: 300, // default
+			maxHeight: 300, // default
+			imageType: 'image/jpeg', // default
+			debug: true, // default
+		},
+		toolbar: [
+			[{ header: [1, 2, false] }],
+			['bold', 'italic', 'underline', 'strike', 'blockquote'],
+			[
+				{ list: 'ordered' },
+				{ list: 'bullet' },
+				{ indent: '-1' },
+				{ indent: '+1' },
+			],
+			['link', 'image'],
+			['clean'],
+			[
+				{ align: '' },
+				{ align: 'center' },
+				{ align: 'right' },
+				{ align: 'justify' },
+			],
+		],
+	};
+
+	const formats = [
+		'header',
+		'bold',
+		'italic',
+		'underline',
+		'strike',
+		'blockquote',
+		'list',
+		'bullet',
+		'indent',
+		'link',
+		'image',
+		'align',
+	];
+
 	return (
 		<>
 			<Form
@@ -50,6 +100,13 @@ const FormTambahArtikel = (props) => {
 					<Form.Item
 						name='image1'
 						className='justify-content-center mt-3 text-center'
+						rules={[
+							{
+								required: true,
+								message: 'Gambar harus diisi!',
+							},
+						]}
+						a
 					>
 						<Upload
 							listType='picture-card'
@@ -91,8 +148,8 @@ const FormTambahArtikel = (props) => {
 								message: 'Judul harus diisi!',
 							},
 							{
-								min: 7,
-								message: 'Judul Produk harus lebih dari 7 huruf',
+								min: 10,
+								message: 'Judul harus lebih dari 10 huruf',
 							},
 						]}
 						a
@@ -112,7 +169,21 @@ const FormTambahArtikel = (props) => {
 					style={{ backgroundColor: '#ffffff' }}
 					className='mb-4'
 				>
-					<Form.Item name='description' className='mt-1 justify-content-center'>
+					<Form.Item
+						name='description'
+						className='mt-1 justify-content-center'
+						rules={[
+							{
+								required: true,
+								message: 'Deskripsi harus diisi!',
+							},
+							{
+								min: 30,
+								message: 'Deskripsi harus lebih dari 30 huruf',
+							},
+						]}
+						a
+					>
 						<TextArea showCount maxLength={100} size='large' />
 					</Form.Item>
 				</List>
@@ -128,8 +199,29 @@ const FormTambahArtikel = (props) => {
 					style={{ backgroundColor: '#ffffff' }}
 					className='mb-4'
 				>
-					<Form.Item name='isi' className='mt-1 justify-content-center'>
-						<TextArea showCount maxLength={500} size='large' />
+					<Form.Item
+						name='isi'
+						wrapperCol={13}
+						className='mt-1 justify-content-center'
+						rules={[
+							{
+								required: true,
+								message: 'Isi Artikel harus diisi!',
+							},
+							{
+								min: 200,
+								message: 'Isi Artikel harus lebih dari 200 huruf',
+							},
+						]}
+						a
+					>
+						<ReactQuill
+							value={textE || ''}
+							onChange={(e) => handleChange(e)}
+							theme='snow'
+							modules={modules}
+							formats={formats}
+						/>
 					</Form.Item>
 				</List>
 

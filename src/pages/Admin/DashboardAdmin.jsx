@@ -1,197 +1,113 @@
 import React, { Component } from 'react';
-import { DatePicker } from 'antd';
-import { Row } from 'reactstrap';
+import { Row, Card, Descriptions } from 'antd';
+import moment from 'moment';
+import 'moment/locale/id';
 import {
-	BarChart,
-	Bar,
 	XAxis,
 	YAxis,
 	CartesianGrid,
 	Tooltip,
 	Legend,
 	ResponsiveContainer,
+	AreaChart,
+	Area,
 } from 'recharts';
+import { connect } from 'react-redux';
+import UIBlocker from 'react-ui-blocker';
+import { getSuccessTransaction } from '../../redux/admin/action/actionAdmin';
 
-const data = [
-	{
-		name: 'Januari',
-		Jumlah_Transaksi: 5,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Februari',
-		Jumlah_Transaksi: 30,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Maret',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'April',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Mei',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Juni',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Juli',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Agustus',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'September',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Oktober',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'November',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Desember',
-		Jumlah_Transaksi: 90,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-];
-const data2 = [
-	{
-		name: 'Januari',
-		Data_Pemasukan: 10000000,
-	},
-	{
-		name: 'Februari',
-		Data_Pemasukan: 9000000,
-	},
-	{
-		name: 'Maret',
-		Data_Pemasukan: 8000000,
-	},
-	{
-		name: 'April',
-		Data_Pemasukan: 7000000,
-	},
-	{
-		name: 'Mei',
-		Data_Pemasukan: 6000000,
-	},
-	{
-		name: 'Juni',
-		Data_Pemasukan: 5000000,
-	},
-	{
-		name: 'Juli',
-		Data_Pemasukan: 4000000,
-	},
-	{
-		name: 'Agustus',
-		Data_Pemasukan: 3000000,
-	},
-	{
-		name: 'September',
-		Data_Pemasukan: 2000000,
-	},
-	{
-		name: 'Oktober',
-		Data_Pemasukan: 1000000,
-	},
-	{
-		name: 'November',
-		Data_Pemasukan: 500000,
-	},
-	{
-		name: 'Desember',
-		Data_Pemasukan: 10000,
-	},
-];
-export default class DashboardAdmin extends Component {
+class DashboardAdmin extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			loading: false,
+		};
+	}
+
+	componentDidMount() {
+		this.props.getSuccessTransaction();
+	}
+
 	render() {
+		const { successTransaction } = this.props;
+
 		return (
 			<div>
-				<Row className='d-flex justify-content-center'>
-					<h3>Data Penjualan</h3>
-				</Row>
-				<DatePicker className='float-right' picker='year' />
-				<ResponsiveContainer width='100%' height={350}>
-					<BarChart
-						width={500}
-						height={300}
-						data={data}
-						margin={{
-							top: 5,
-							right: 30,
-							left: 20,
-							bottom: 5,
-						}}
-					>
-						<CartesianGrid strokeDasharray='3 3' />
-						<XAxis dataKey='name' />
-						<YAxis />
-						<Tooltip />
-						<Legend verticalAlign='top' height={36} />
-						<Bar dataKey='Jumlah_Transaksi' fill='#00F0FF' />
-						<Bar dataKey='Transaksi_Berhasil' fill='#FFF500' />
-						<Bar dataKey='Transaksi_Gagal' fill='#FF0000' />
-					</BarChart>
-				</ResponsiveContainer>
+				<UIBlocker
+					theme='bounce' // default
+					isVisible={this.props.loading}
+					message=''
+				/>
+				<Card className='mt-2'>
+					<Row>
+						<Card.Grid
+							style={{ width: '30%', height: 'auto' }}
+							className='mr-4'
+						>
+							<Descriptions
+								column={{ xxl: 4, xl: 1, lg: 3, md: 3, sm: 2, xs: 1 }}
+								title='Total Pendapatan'
+								layout='vertical'
+								bordered
+							>
+								<Descriptions.Item>
+									<p style={{ fontSize: '2em', fontWeight: 'bold' }}>
+										{'Rp'}
+										{this.props.totalT}
+									</p>
+								</Descriptions.Item>
+							</Descriptions>
+						</Card.Grid>
 
-				<Row className='d-flex justify-content-center mt-5'>
-					<h3>Data Pemasukan</h3>
-				</Row>
-				<DatePicker className='float-right' picker='year' />
-				<ResponsiveContainer width='100%' height={350}>
-					<BarChart
-						width={500}
-						height={300}
-						data={data2}
-						margin={{
-							top: 5,
-							right: 30,
-							left: 20,
-							bottom: 5,
-						}}
-					>
-						<CartesianGrid strokeDasharray='3 3' />
-						<XAxis dataKey='name' />
-						<YAxis />
-						<Tooltip />
-						<Legend verticalAlign='top' height={36} />
-						<Bar dataKey='Data_Pemasukan' fill='#00F0FF' />
-					</BarChart>
-				</ResponsiveContainer>
+						<Card.Grid
+							className='ml-4'
+							style={{ width: '65%', height: 'auto' }}
+						>
+							<ResponsiveContainer width='100%' height={350}>
+								<AreaChart
+									width={500}
+									height={300}
+									data={successTransaction}
+									margin={{
+										top: 5,
+										right: 30,
+										left: 20,
+										bottom: 5,
+									}}
+								>
+									<CartesianGrid strokeDasharray='3 3' />
+									<XAxis
+										dataKey='_id'
+										tickFormatter={(str) => {
+											return moment(str).format('MMMM');
+										}}
+									/>
+									<YAxis />
+									<Tooltip />
+									<Legend verticalAlign='top' height={36} />
+									<Area
+										name='Statistik Pendapatan'
+										dataKey='totalPrice'
+										type='monotone'
+										stroke='blue'
+										fill='#f74e38'
+									/>
+									{/* <Bar dataKey='Transaksi_Berhasil' fill='#FFF500' /> */}
+									{/* <Bar dataKey='Transaksi_Gagal' fill='#FF0000' /> */}
+								</AreaChart>
+							</ResponsiveContainer>
+						</Card.Grid>
+					</Row>
+				</Card>
 			</div>
 		);
 	}
 }
+
+const mapStateToProps = (state) => {
+	const { successTransaction, totalT, loading, error } = state.reducerAdmin;
+	return { successTransaction, totalT, loading, error };
+};
+export default connect(mapStateToProps, {
+	getSuccessTransaction,
+})(DashboardAdmin);

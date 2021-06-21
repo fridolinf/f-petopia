@@ -6,6 +6,7 @@ import {
 	tolakDataVerifikasi,
 } from '../../../redux/admin/action/actionAdmin';
 import { connect } from 'react-redux';
+import swal from 'sweetalert';
 
 const sorter = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
@@ -14,6 +15,48 @@ class VerifikasiSupplier extends React.Component {
 	componentDidMount() {
 		this.props.getDataVerifikasi();
 	}
+
+	terimaNotif = (id) => {
+		swal({
+			title: 'Apakah anda yakin?',
+			text: 'User akan menjadi pemilik toko!',
+			icon: 'warning',
+			buttons: true,
+			dangerMode: true,
+		}).then((willDelete) => {
+			if (willDelete) {
+				this.props.accDataVerifikasi(id);
+				swal('data berhasil disimpan', {
+					icon: 'success',
+				});
+			} else {
+				swal('baik terimakasih', {
+					icon: 'success',
+				});
+			}
+		});
+	};
+
+	tolakNotif = (id) => {
+		swal({
+			title: 'Apakah anda yakin?',
+			text: 'data market user akan dihapus!',
+			icon: 'warning',
+			buttons: true,
+			dangerMode: true,
+		}).then((willDelete) => {
+			if (willDelete) {
+				this.props.tolakDataVerifikasi(id);
+				swal('user telah ditolak menjadi pemilik toko', {
+					icon: 'success',
+				});
+			} else {
+				swal('baik terimakasih', {
+					icon: 'success',
+				});
+			}
+		});
+	};
 
 	render() {
 		const columnDataVerifikasi = [
@@ -55,7 +98,7 @@ class VerifikasiSupplier extends React.Component {
 							className='btn btn-primary'
 							onClick={(e) => {
 								e.stopPropagation();
-								this.props.accDataVerifikasi(record.id);
+								this.terimaNotif(record.id);
 							}}
 						>
 							Terima
@@ -64,7 +107,7 @@ class VerifikasiSupplier extends React.Component {
 							className='btn btn-danger'
 							onClick={(e) => {
 								e.stopPropagation();
-								this.props.tolakDataVerifikasi(record.id);
+								this.tolakNotif(record.id);
 							}}
 						>
 							Tolak
@@ -76,7 +119,7 @@ class VerifikasiSupplier extends React.Component {
 
 		return (
 			<div>
-				<h4 className='my-3'>Verifikasi Supplier</h4>
+				<h4 className='my-3'>Data Pendaftaran Toko</h4>
 				<Table
 					columns={columnDataVerifikasi}
 					dataSource={this.props.userVerifikasi}

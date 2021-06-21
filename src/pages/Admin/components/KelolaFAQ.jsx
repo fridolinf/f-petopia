@@ -13,6 +13,9 @@ import swal from 'sweetalert';
 import UIBlocker from 'react-ui-blocker';
 import DetailFaq from './modal/DetailFaq';
 import FormEditFaq from './modal/FormEditFaq';
+import moment from 'moment';
+import 'moment/locale/id';
+import { isLongText } from '../../../utils/utility';
 
 const sorter = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
@@ -89,7 +92,9 @@ class KelolaFAQ extends React.Component {
 
 				this.setState({ isModalAddFaq: false });
 			} else {
-				swal('baik terimakasih');
+				swal('baik terimakasih', {
+					icon: 'success',
+				});
 			}
 		});
 	};
@@ -107,6 +112,7 @@ class KelolaFAQ extends React.Component {
 			isModalEditFaq: false,
 			isModalDetailFaq: false,
 		});
+		window.location.href = process.env.PUBLIC_URL + '/admin/kelolafaq';
 	};
 
 	render() {
@@ -123,12 +129,18 @@ class KelolaFAQ extends React.Component {
 			{
 				title: 'Jawaban',
 				dataIndex: 'jawaban',
+				render: (text) => (
+					<div
+						dangerouslySetInnerHTML={{ __html: isLongText(text, 100) }}
+					></div>
+				),
 				key: 'jawaban',
 			},
 			{
 				title: 'Tanggal_dibuat',
 				dataIndex: 'dateCreated',
 				key: 'dateCreated',
+				render: (text) => moment(text).format('LLLL'),
 				sorter: (a, b) => sorter(a.dateCreated, b.dateCreated),
 				sortDirections: ['descend', 'ascend'],
 			},
@@ -203,10 +215,13 @@ class KelolaFAQ extends React.Component {
 				{/* Modal Detail Habis */}
 				<Modal
 					width='50%'
-					title='Detail Produk'
+					title='Detail FAQ'
 					visible={isModalDetailFaq}
-					onOk={this.handleOk}
-					onCancel={this.handleCancel}
+					footer={
+						<Button key='back' onClick={this.handleOk}>
+							Tutup
+						</Button>
+					}
 				>
 					<DetailFaq data={this.props.faq} />
 				</Modal>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Modal, Space } from 'antd';
+import { Table, Modal, Space, Button } from 'antd';
 import {
 	getDataUsers,
 	getDataUsersSupplier,
@@ -9,6 +9,8 @@ import {
 import { connect } from 'react-redux';
 import DetailSupplier from './modal/DetailSupplier';
 import swal from 'sweetalert';
+import moment from 'moment';
+import 'moment/locale/id';
 
 const sorter = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
@@ -17,10 +19,10 @@ class KelolaUser extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isModalAddProduk: false,
-			isModalKategoriProduk: false,
-			isModalEditHabis: false,
-			isModalDetailHabis: false,
+			isModalAddUser: false,
+			isModalKategoriUser: false,
+			isModalEditUser: false,
+			isModalDetailUser: false,
 		};
 	}
 
@@ -29,21 +31,21 @@ class KelolaUser extends React.Component {
 		this.props.getDataUsersSupplier();
 	}
 
-	showModal1Habis = () => {
-		this.setState({ isModalAddProduk: true });
+	showModal1User = () => {
+		this.setState({ isModalAddUser: true });
 	};
 
-	showModal2Habis = () => {
-		this.setState({ isModalKategoriProduk: true });
+	showModal2User = () => {
+		this.setState({ isModalKategoriUser: true });
 	};
 
-	showEditHabis = () => {
-		this.setState({ isModalEditHabis: true });
+	showEditUser = () => {
+		this.setState({ isModalEditUser: true });
 	};
 
-	showDetailHabis = (id) => {
+	showDetailUser = (id) => {
 		this.setState({
-			isModalDetailHabis: true,
+			isModalDetailUser: true,
 		});
 		this.props.getDetailSupplier(id);
 	};
@@ -62,29 +64,31 @@ class KelolaUser extends React.Component {
 					icon: 'success',
 				});
 
-				this.setState({ isModalAddProduk: false });
+				this.setState({ isModalAddUser: false });
 			} else {
-				swal('baik terimakasih');
+				swal('baik terimakasih', {
+					icon: 'success',
+				});
 			}
 		});
 	};
 
 	handleOk = () => {
 		this.setState({
-			isModalEditHabis: false,
-			isModalDetailHabis: false,
+			isModalEditUser: false,
+			isModalDetailUser: false,
 		});
 	};
 
 	handleCancel = () => {
 		this.setState({
-			isModalEditHabis: false,
-			isModalDetailHabis: false,
+			isModalEditUser: false,
+			isModalDetailUser: false,
 		});
 	};
 
 	render() {
-		const { isModalEditHabis, isModalDetailHabis } = this.state;
+		const { isModalEditUser, isModalDetailUser } = this.state;
 
 		// Table Users
 		const columnUsers = [
@@ -118,30 +122,28 @@ class KelolaUser extends React.Component {
 				title: 'Tanggal_dibuat',
 				dataIndex: 'dateCreated',
 				key: 'dateCreated',
+				render: (text) => moment(text).format('LLLL'),
 				sorter: (a, b) => sorter(a.dateCreated, b.dateCreated),
 				sortDirections: ['descend', 'ascend'],
 			},
-			{
-				title: 'Aksi',
-				dataIndex: 'aksi',
-				key: 'Aksi',
-				render: (text, record) => (
-					<Space size='small' direction='vertical'>
-						<button className='btn btn-warning' onClick={this.showEditHabis}>
-							Edit
-						</button>
-						<button
-							className='btn btn-danger'
-							onClick={(e) => {
-								e.stopPropagation();
-								this.delNotification(record.id);
-							}}
-						>
-							Delete
-						</button>
-					</Space>
-				),
-			},
+			// {
+			// 	title: 'Aksi',
+			// 	dataIndex: 'aksi',
+			// 	key: 'Aksi',
+			// 	render: (text, record) => (
+			// 		<Space size='small' direction='vertical'>
+			// 			<button
+			// 				className='btn btn-danger'
+			// 				onClick={(e) => {
+			// 					e.stopPropagation();
+			// 					this.delNotification(record.id);
+			// 				}}
+			// 			>
+			// 				Delete
+			// 			</button>
+			// 		</Space>
+			// 	),
+			// },
 		];
 		// Table Admin
 		const columnAdmin = [
@@ -175,6 +177,7 @@ class KelolaUser extends React.Component {
 				title: 'Tanggal_dibuat',
 				dataIndex: 'dateCreated',
 				key: 'dateCreated',
+				render: (text) => moment(text).format('LLLL'),
 				sorter: (a, b) => sorter(a.dateCreated, b.dateCreated),
 				sortDirections: ['descend', 'ascend'],
 			},
@@ -184,19 +187,15 @@ class KelolaUser extends React.Component {
 				key: 'Aksi',
 				render: (text, record) => (
 					<Space size='small' direction='vertical'>
-						<button className='btn btn-warning' onClick={this.showEditHabis}>
-							Edit
-						</button>
 						<button
 							className='btn btn-info'
 							onClick={(e) => {
 								e.stopPropagation();
-								this.showDetailHabis(record.id);
+								this.showDetailUser(record.id);
 							}}
 						>
 							Detail
 						</button>
-						<button className='btn btn-danger'>Delete</button>
 					</Space>
 				),
 			},
@@ -204,21 +203,21 @@ class KelolaUser extends React.Component {
 
 		return (
 			<div>
-				<h4 className='my-3'>Data User</h4>
+				<h4 className='my-3'>Data Pembeli</h4>
 				<Table columns={columnUsers} dataSource={this.props.users} />
 
-				{/* Modal Edit Habis  */}
+				{/* Modal Edit User  */}
 				<Modal
-					title='Edit Produk'
-					visible={isModalEditHabis}
+					title='Edit User'
+					visible={isModalEditUser}
 					onOk={this.handleOk}
 					onCancel={this.handleCancel}
 				></Modal>
 
-				{/* Modal Detail Habis */}
+				{/* Modal Detail User */}
 				<Modal
-					title='Detail Produk'
-					visible={isModalDetailHabis}
+					title='Detail User'
+					visible={isModalDetailUser}
 					onOk={this.handleOk}
 					onCancel={this.handleCancel}
 				></Modal>
@@ -227,21 +226,25 @@ class KelolaUser extends React.Component {
 				<h4 className='my-3'>Data Pemilik Toko</h4>
 				<Table columns={columnAdmin} dataSource={this.props.usersSupplier} />
 
-				{/* Modal Edit Habis  */}
+				{/* Modal Edit User  */}
 				<Modal
-					title='Edit Produk'
-					visible={isModalEditHabis}
+					title='Edit User'
+					visible={isModalEditUser}
 					onOk={this.handleOk}
 					onCancel={this.handleCancel}
 				></Modal>
 
-				{/* Modal Detail Habis */}
+				{/* Modal Detail User */}
 				<Modal
 					width='50%'
 					title='Detail Supplier'
-					visible={isModalDetailHabis}
-					onOk={this.handleOk}
-					onCancel={this.handleCancel}
+					visible={isModalDetailUser}
+					footer={
+						<Button key='back' onClick={this.handleCancel}>
+							Tutup
+						</Button>
+					}
+					closable={null}
 				>
 					<DetailSupplier data={this.props.supplierDetail} />
 				</Modal>

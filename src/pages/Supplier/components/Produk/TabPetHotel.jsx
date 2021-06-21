@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Table, Modal, Space, Tag, message } from 'antd';
 import UIBlocker from 'react-ui-blocker';
 import FormTambahP from './components/FormTambahP';
-import FormTambahK from './components/FormTambahK';
 import FormEdit from './components/FormEdit';
 import FormDetail from './components/FormDetail';
 import { connect } from 'react-redux';
@@ -11,8 +10,12 @@ import {
 	delProducts,
 	addProducts,
 	updateProducts,
+	getDataProducts,
 } from '../../../../redux/supplier/action/actionSupplier';
 import swal from 'sweetalert';
+import moment from 'moment';
+import 'moment/locale/id';
+import { isLongText } from '../../../../utils/utility';
 
 export const sorter = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
@@ -27,11 +30,11 @@ const getBase64 = (img, callback) => {
 const beforeUpload = (file) => {
 	const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
 	if (!isJpgOrPng) {
-		message.error('You can only upload JPG/PNG file!');
+		message.error('Hanya bisa upload file jpg/jpeg/png!');
 	}
 	const isLt2M = file.size / 1024 / 1024 < 2;
 	if (!isLt2M) {
-		message.error('Image must smaller than 2MB!');
+		message.error('Gambar tidak bisa lebih dari 2MB!');
 	}
 	return isJpgOrPng && isLt2M;
 };
@@ -40,7 +43,7 @@ class TabPetHotel extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isModalAddProduk: false,
+			isModalTambahPetHotel: false,
 			isModalEditHotel: false,
 			isModalDetailHotel: false,
 			loading: false,
@@ -67,10 +70,6 @@ class TabPetHotel extends React.Component {
 
 	showModal1Hotel = () => {
 		this.setState({ isModalTambahPetHotel: true });
-	};
-
-	showModal2Hotel = () => {
-		this.setState({ isModalKategoriPetHotel: true });
 	};
 
 	showEditHotel = (id) => {
@@ -196,8 +195,8 @@ class TabPetHotel extends React.Component {
 				swal('data berhasil dihapus', {
 					icon: 'success',
 				});
-
 				this.setState({ isModalTambahPetHotel: false });
+				this.props.getDataProducts();
 			} else {
 				swal('baik terimakasih');
 			}
@@ -213,10 +212,11 @@ class TabPetHotel extends React.Component {
 
 	handleCancel = () => {
 		this.setState({
-			isModalAddProduk: false,
+			isModalTambahPetHotel: false,
 			isModalEditHotel: false,
 			isModalDetailHotel: false,
 		});
+		window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
 	};
 	handleCancelEdit = () => {
 		this.setState({
@@ -248,6 +248,7 @@ class TabPetHotel extends React.Component {
 				title: 'Deskripsi',
 				width: 200,
 				dataIndex: 'description',
+				render: (text) => isLongText(text, 100),
 				key: 'description',
 			},
 			{
@@ -257,7 +258,7 @@ class TabPetHotel extends React.Component {
 				render: (image1) => <img width={50} src={image1} alt={'gambar'}></img>,
 			},
 			{
-				title: 'Gambar',
+				title: 'Gambar Lanjut',
 				dataIndex: 'image2',
 				key: 'image2',
 				render: (image2) => <img width={50} src={image2} alt={'gambars'}></img>,
@@ -291,8 +292,8 @@ class TabPetHotel extends React.Component {
 			},
 			{
 				title: 'Rating',
-				dataIndex: 'rating',
-				key: 'rating',
+				dataIndex: 'avgRating',
+				key: 'avgRating',
 				sorter: (a, b) => sorter(a.rating, b.rating),
 			},
 			{
@@ -314,6 +315,7 @@ class TabPetHotel extends React.Component {
 				title: 'Tanggal_dibuat',
 				dataIndex: 'dateCreated',
 				key: 'dateCreated',
+				render: (text) => moment(text).format('LLLL'),
 				sorter: (a, b) => sorter(a.dateCreated, b.dateCreated),
 				sortDirections: ['descend', 'ascend'],
 			},
@@ -369,7 +371,11 @@ class TabPetHotel extends React.Component {
 				</div>
 
 				<h4 className='my-3'>Data Produk Pet Hotel</h4>
-				<Table columns={columnsPetHotel} dataSource={this.props.data} />
+				<Table
+					columns={columnsPetHotel}
+					scroll={{ x: 1300 }}
+					dataSource={this.props.data}
+				/>
 
 				{/* Modal Pet Hotel */}
 				<Modal
@@ -426,8 +432,12 @@ class TabPetHotel extends React.Component {
 					width='50%'
 					title='Detail Produk'
 					visible={isModalDetailHotel}
-					onOk={this.handleOk}
-					onCancel={this.handleCancel}
+					footer={
+						<Button key='back' onClick={this.handleCancel}>
+							Tutup
+						</Button>
+					}
+					closable={null}
 				>
 					<FormDetail data={this.props.product} />
 				</Modal>
@@ -445,4 +455,5 @@ export default connect(mapStateToProps, {
 	delProducts,
 	addProducts,
 	updateProducts,
+	getDataProducts,
 })(TabPetHotel);

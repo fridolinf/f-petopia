@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { DatePicker } from 'antd';
-import { Row } from 'reactstrap';
 import {
 	BarChart,
+	Line,
+	LineChart,
 	Bar,
 	XAxis,
 	YAxis,
@@ -11,187 +11,173 @@ import {
 	Legend,
 	ResponsiveContainer,
 } from 'recharts';
+import { getIncome } from '../../redux/supplier/action/actionSupplier';
+import { connect } from 'react-redux';
+import UIBlocker from 'react-ui-blocker';
+import { Card, Row, Descriptions, Button, Modal } from 'antd';
+import moment from 'moment';
+import 'moment/locale/id';
 
-const data = [
-	{
-		name: 'Januari',
-		Jumlah_Transaksi: 5,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Februari',
-		Jumlah_Transaksi: 30,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Maret',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'April',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Mei',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Juni',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Juli',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Agustus',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'September',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Oktober',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'November',
-		Jumlah_Transaksi: 40,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-	{
-		name: 'Desember',
-		Jumlah_Transaksi: 90,
-		Transaksi_Gagal: 20,
-		Transaksi_Berhasil: 10,
-	},
-];
-const data2 = [
-	{
-		name: 'Januari',
-		Data_Pemasukan: 10000000,
-	},
-	{
-		name: 'Februari',
-		Data_Pemasukan: 9000000,
-	},
-	{
-		name: 'Maret',
-		Data_Pemasukan: 8000000,
-	},
-	{
-		name: 'April',
-		Data_Pemasukan: 7000000,
-	},
-	{
-		name: 'Mei',
-		Data_Pemasukan: 6000000,
-	},
-	{
-		name: 'Juni',
-		Data_Pemasukan: 5000000,
-	},
-	{
-		name: 'Juli',
-		Data_Pemasukan: 4000000,
-	},
-	{
-		name: 'Agustus',
-		Data_Pemasukan: 3000000,
-	},
-	{
-		name: 'September',
-		Data_Pemasukan: 2000000,
-	},
-	{
-		name: 'Oktober',
-		Data_Pemasukan: 1000000,
-	},
-	{
-		name: 'November',
-		Data_Pemasukan: 500000,
-	},
-	{
-		name: 'Desember',
-		Data_Pemasukan: 10000,
-	},
-];
-export default class Dashboard extends Component {
+class Dashboard extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+	componentDidMount() {
+		this.props.getIncome();
+		// this.props.getTransactions();
+	}
 	render() {
+		const { income, transactions } = this.props;
 		return (
 			<div>
-				<Row className='d-flex justify-content-center'>
-					<h3>Data Penjualan</h3>
-				</Row>
-				<DatePicker className='float-right' picker='year' />
-				<ResponsiveContainer width='100%' height={350}>
-					<BarChart
-						width={500}
-						height={300}
-						data={data}
-						margin={{
-							top: 5,
-							right: 30,
-							left: 20,
-							bottom: 5,
-						}}
-					>
-						<CartesianGrid strokeDasharray='3 3' />
-						<XAxis dataKey='name' />
-						<YAxis />
-						<Tooltip />
-						<Legend verticalAlign='top' height={36} />
-						<Bar dataKey='Jumlah_Transaksi' fill='#00F0FF' />
-						<Bar dataKey='Transaksi_Berhasil' fill='#FFF500' />
-						<Bar dataKey='Transaksi_Gagal' fill='#FF0000' />
-					</BarChart>
-				</ResponsiveContainer>
+				<UIBlocker
+					theme='bounce' // default
+					isVisible={this.props.loading}
+					message=''
+				/>
 
-				<Row className='d-flex justify-content-center mt-5'>
-					<h3>Data Pemasukan</h3>
-				</Row>
-				<DatePicker className='float-right' picker='year' />
-				<ResponsiveContainer width='100%' height={350}>
-					<BarChart
-						width={500}
-						height={300}
-						data={data2}
-						margin={{
-							top: 5,
-							right: 30,
-							left: 20,
-							bottom: 5,
-						}}
-					>
-						<CartesianGrid strokeDasharray='3 3' />
-						<XAxis dataKey='name' />
-						<YAxis />
-						<Tooltip />
-						<Legend verticalAlign='top' height={36} />
-						<Bar dataKey='Data_Pemasukan' fill='#00F0FF' />
-					</BarChart>
-				</ResponsiveContainer>
+				<Card className='mb-3'>
+					<Row className='d-flex justify-content-center mb-3'>
+						<h3>Data Penghasilan</h3>
+					</Row>
+
+					<Row>
+						<Card.Grid style={{ width: '30%', height: '50%' }} className='mr-4'>
+							<Descriptions
+								column={{ xxl: 4, xl: 1, lg: 3, md: 3, sm: 2, xs: 1 }}
+								title='Informasi Saldo'
+								layout='vertical'
+								bordered
+							>
+								<Descriptions.Item label='Saldo'>
+									<p style={{ fontSize: '2em', fontWeight: 'bold' }}>
+										{'Rp'}
+										{this.props.totalPrice}
+									</p>
+								</Descriptions.Item>
+							</Descriptions>
+							<Button
+								className='mt-2 float-right'
+								style={{ backgroundColor: '#dbdbdb' }}
+								href='https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=petopia.admin@gmail.com'
+							>
+								Tarik Dana
+							</Button>
+							{/* <Button
+								onClick={(e) => {
+									e.stopPropagation();
+									this.showModal();
+								}}
+								className='float-right mt-3'
+								style={{
+									fontWeight: 'bold',
+									background: 'orange',
+									color: 'white',
+								}}
+							>
+								Tarik Dana
+							</Button> */}
+						</Card.Grid>
+						<Card.Grid
+							className='ml-4'
+							style={{ width: '65%', height: 'auto' }}
+						>
+							<ResponsiveContainer width='100%' height={490}>
+								<LineChart width={500} height={400} data={income}>
+									<CartesianGrid strokeDasharray='3 3' />
+									<XAxis
+										dataKey='_id'
+										tickFormatter={(str) => {
+											return moment(str).format('MMMM');
+										}}
+									/>
+									<YAxis />
+									<Tooltip />
+									<Legend
+										wrapperStyle={{
+											paddingBottom: '1%',
+										}}
+										verticalAlign='top'
+										layout='vertical'
+									/>
+									<Line
+										type='monotone'
+										name='Jumlah Penghasilan'
+										dataKey='totalPrice'
+										stroke='#8884d8'
+									/>
+								</LineChart>
+							</ResponsiveContainer>
+						</Card.Grid>
+					</Row>
+				</Card>
+
+				{/* <Card className='mt-2'>
+					<Row className='justify-content-center mb-4'>
+						<h3>Data Transaksi</h3>
+					</Row>
+					<Row>
+						<Card.Grid
+							style={{ width: '30%', height: 'auto' }}
+							className='mr-4 float-left'
+						>
+							<Descriptions
+								column={{ xxl: 4, xl: 1, lg: 3, md: 3, sm: 2, xs: 1 }}
+								title='Total Transaksi'
+								layout='vertical'
+								bordered
+							>
+								<Descriptions.Item>
+									<p style={{ fontSize: '2em', fontWeight: 'bold' }}>
+										{'Rp'}
+										{this.props.totalQuantity}
+									</p>
+								</Descriptions.Item>
+							</Descriptions>
+						</Card.Grid>
+						<Card.Grid
+							className='ml-4'
+							style={{ width: '65%', height: 'auto' }}
+						>
+							<ResponsiveContainer width='100%' height={400}>
+								<BarChart
+									data={transactions}
+									margin={{
+										top: 5,
+										bottom: 5,
+									}}
+								>
+									<CartesianGrid strokeDasharray='3 3' />
+									<XAxis dataKey='dateOrdered2' />
+									<YAxis />
+									<Tooltip />
+									<Legend verticalAlign='top' height={36} />
+									<Bar
+										barSize={30}
+										dataKey='quantity'
+										name='Jumlah Transaksi'
+										fill='#00F0FF'
+									/>
+								</BarChart>
+							</ResponsiveContainer>
+						</Card.Grid>
+					</Row>
+				</Card> */}
 			</div>
 		);
 	}
 }
+const mapStateToProps = (state) => {
+	const {
+		income,
+		totalPrice,
+		totalQuantity,
+		loading,
+		error,
+	} = state.reducerSupplier;
+	return { income, totalPrice, totalQuantity, loading, error };
+};
+export default connect(mapStateToProps, {
+	getIncome,
+})(Dashboard);

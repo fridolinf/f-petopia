@@ -13,6 +13,8 @@ import KelolaUser from '../pages/Admin/components/KelolaUser';
 import VerifikasiSupplier from '../pages/Admin/components/VerifikasiSupplier';
 import KelolaFAQ from '../pages/Admin/components/KelolaFAQ';
 import KelolaArtikel from '../pages/Admin/components/KelolaArtikel';
+import Faq from '../pages/Supplier/Faq';
+import LihatTransaksi from '../pages/Admin/components/LihatTransaksi';
 import { connect } from 'react-redux';
 import PrivateRoutes from './PrivateRoutes';
 
@@ -22,7 +24,7 @@ class index extends Component {
 			<Router>
 				<Switch>
 					<Route path='/login' component={Login} />
-					<PrivateRoutes exact path='/' component={Home} />
+					<PrivateRoutes exact path='/' component={Login} />
 					<PrivateRoutes path='/supplier/:path?' roles={['2']} exact>
 						<LayoutSupplier>
 							<Switch>
@@ -53,6 +55,11 @@ class index extends Component {
 									roles={['2']}
 									component={KelolaProduk}
 								/>
+								<PrivateRoutes
+									path='/supplier/faq'
+									roles={['2']}
+									component={Faq}
+								/>
 							</Switch>
 						</LayoutSupplier>
 					</PrivateRoutes>
@@ -65,6 +72,11 @@ class index extends Component {
 									path='/admin'
 									component={DashboardAdmin}
 									exact
+									roles={['1']}
+								/>
+								<PrivateRoutes
+									path='/admin/lihattransaksi'
+									component={LihatTransaksi}
 									roles={['1']}
 								/>
 								<PrivateRoutes

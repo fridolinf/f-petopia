@@ -16,11 +16,21 @@ const FormDetailArtikel = (props) => {
 			</Descriptions>
 			<Descriptions bordered layout='vertical'>
 				<Descriptions.Item label='Deskripsi'>
-					{data.description}
+					<div
+						dangerouslySetInnerHTML={{
+							__html: data.descriptiption,
+						}}
+					></div>
 				</Descriptions.Item>
 			</Descriptions>
 			<Descriptions bordered layout='vertical'>
-				<Descriptions.Item label='Isi Artikel'>{data.isi}</Descriptions.Item>
+				<Descriptions.Item label='Isi Artikel'>
+					<div
+						dangerouslySetInnerHTML={{
+							__html: data.isi,
+						}}
+					></div>
+				</Descriptions.Item>
 			</Descriptions>
 		</>
 	);
