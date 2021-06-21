@@ -1,41 +1,62 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import {
-	Layout,
-	Menu,
-	Avatar,
-	Typography,
-	Badge,
-	Button,
-	Dropdown,
-} from 'antd';
+import { Layout, Menu, Avatar, Typography, Button } from 'antd';
 import {
 	MenuUnfoldOutlined,
 	MenuFoldOutlined,
 	UserOutlined,
-	MailOutlined,
 	DashboardOutlined,
-	DownOutlined,
+	TeamOutlined,
 	QuestionCircleOutlined,
 	ProfileOutlined,
+	ShoppingCartOutlined,
 } from '@ant-design/icons';
 import { session } from '../utils/session';
 import logo from '../assets/images/logo.jpeg';
+import { withRouter } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
 
 const { Text } = Typography;
 
-const menu = (
-	<Menu>
-		<Menu.Item danger>
-			<Link to='/admin/kelolauser'>Kelola User</Link>
-		</Menu.Item>
-		<Menu.Item danger>
-			<Link to='/admin/verifikasi'>Verifikasi Supplier</Link>
-		</Menu.Item>
-	</Menu>
-);
+const menuPindah = [
+	{
+		key: '1',
+		label: 'Dashboard',
+		path: '/admin',
+		icon: <DashboardOutlined />,
+	},
+	{
+		key: '2',
+		label: 'Lihat Transaksi',
+		path: '/admin/lihattransaksi',
+		icon: <ShoppingCartOutlined />,
+	},
+	{
+		key: '3',
+		label: 'Kelola User',
+		path: '/admin/kelolauser',
+		icon: <UserOutlined />,
+	},
+	{
+		key: '4',
+		label: 'Verifikasi',
+		path: '/admin/verifikasi',
+		icon: <TeamOutlined />,
+	},
+	{
+		key: '5',
+		label: 'Kelola Faq',
+		path: '/admin/kelolafaq',
+		icon: <QuestionCircleOutlined />,
+	},
+	{
+		key: '6',
+		label: 'Kelola Artikel',
+		path: '/admin/kelolaartikel',
+		icon: <ProfileOutlined />,
+	},
+];
 
 class LayoutAdmin extends React.Component {
 	constructor(props) {
@@ -43,7 +64,18 @@ class LayoutAdmin extends React.Component {
 		this.state = {
 			auth: true,
 			collapsed: false,
+			selectedKeys: [this.props.location.pathname],
 		};
+	}
+
+	componentDidUpdate(previousProps, previousState) {
+		if (previousState.selectedKeys !== this.state.selectedKeys) {
+			this.setState({
+				selectedKeys: menuPindah.find(
+					(_item) => _item.path === this.props.location.pathname
+				).key,
+			});
+		}
 	}
 
 	toggle = () => {
@@ -55,6 +87,10 @@ class LayoutAdmin extends React.Component {
 	onlogout = () => {
 		session(null);
 		window.location.href = process.env.PUBLIC_URL + '/login';
+	};
+
+	onClickMenu = (item) => {
+		const path = menuPindah.find((_item) => _item.path === item.path);
 	};
 
 	render() {
@@ -84,49 +120,31 @@ class LayoutAdmin extends React.Component {
 						<Menu
 							style={{ background: '#f74e38' }}
 							mode='inline'
-							defaultSelectedKeys={['1']}
+							selectedKeys={[this.props.location.pathname]}
+							onClick={menuPindah}
 						>
-							<Menu.Item key='1' icon={<DashboardOutlined />}>
-								<NavLink
-									className='nav-text'
-									style={{ color: 'black' }}
-									to='/admin'
-								>
-									Dashboard
-								</NavLink>
-							</Menu.Item>
-							<Menu.Item key='2' icon={<UserOutlined />}>
-								<NavLink className='nav-text' style={{ color: 'black' }} to='/'>
-									Kelola User
-									<Dropdown overlay={menu}>
-										<a href='/' onClick={(e) => e.preventDefault()}>
-											<DownOutlined style={{ color: 'black' }} />
-										</a>
-									</Dropdown>
-								</NavLink>
-							</Menu.Item>
-							<Menu.Item key='3' icon={<QuestionCircleOutlined />}>
-								<NavLink
-									className='nav-text'
-									style={{ color: 'black' }}
-									to='/admin/kelolafaq'
-								>
-									Kelola FAQ
-								</NavLink>
-							</Menu.Item>
-							<Menu.Item key='4' icon={<ProfileOutlined />}>
-								<NavLink
-									className='nav-text'
-									style={{ color: 'black' }}
-									to='/admin/kelolaartikel'
-								>
-									Kelola Artikel
-								</NavLink>
-							</Menu.Item>
+							{menuPindah.map((item) => (
+								<>
+									<Menu.Item key={item.path} icon={item.icon}>
+										<NavLink
+											className='nav-text'
+											style={{ color: 'black' }}
+											to={item.path}
+										>
+											{item.label}
+										</NavLink>
+									</Menu.Item>
+								</>
+							))}
 						</Menu>
 						<Button
 							onClick={this.onlogout}
-							style={{ width: '200px', background: '#f74e38', color: 'black' }}
+							style={{
+								width: '200px',
+								background: '#f74e38',
+								color: 'black',
+								zIndex: 1,
+							}}
 							className='fixed-bottom'
 						>
 							Keluar
@@ -137,21 +155,6 @@ class LayoutAdmin extends React.Component {
 							className='site-layout-background'
 							style={{ padding: 0, background: '#f74e38' }}
 						>
-							<div className={'float-right mr-4'}>
-								<a href='/' className='mr-3' style={{ color: 'black' }}>
-									Help guides
-								</a>
-								<a href='/'>
-									<span style={{ color: 'black' }} className='mr-1 mt-5'>
-										Inbox
-									</span>
-									<Badge count={5}>
-										<MailOutlined
-											style={{ fontSize: '30px', color: 'black' }}
-										/>
-									</Badge>
-								</a>
-							</div>
 							{React.createElement(
 								this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
 								{
@@ -176,4 +179,4 @@ class LayoutAdmin extends React.Component {
 		);
 	}
 }
-export default LayoutAdmin;
+export default withRouter(LayoutAdmin);

@@ -81,7 +81,6 @@ class Login extends Component {
 												message={this.props.error}
 												type='error'
 												showIcon
-												closable
 											/>
 										)}
 										<Form
@@ -96,6 +95,11 @@ class Login extends Component {
 													{
 														required: true,
 														message: 'Masukkan email anda',
+													},
+													{
+														type: 'email',
+														message:
+															'Email anda harus seperti berikut: contoh@example.com atau contoh@yahoo.com',
 													},
 												]}
 											>
@@ -125,7 +129,7 @@ class Login extends Component {
 
 											<Form.Item {...tailLayout}>
 												<Button type='primary' htmlType='submit'>
-													Submit
+													Masuk
 												</Button>
 											</Form.Item>
 										</Form>

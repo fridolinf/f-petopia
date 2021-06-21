@@ -5,10 +5,23 @@ export const api = {
 	delUser: (id) => `${baseUrl}/kelolauser/${id}`,
 
 	// SUPPLIER
-	getSupplierDetail: (id) => `${baseUrl}/kelolauser/${id}`,
+	getSupplierDetail: (id) => `${baseUrl}/kelolauser/detail/${id}`,
+	getIncome: (id) => `${baseUrl}/users/${id}/semuaPemasukkan`,
+	getTransactions: (id) => `${baseUrl}/users/${id}/datatransaksi`,
+	updateSupplier: (id) => `${baseUrl}/users/updateProfile/${id}`,
 
 	// ORDER
-	getOrderList: (status) => `${baseUrl}/orders/pesanan/${status}`,
+	getOrderNewList: (id) => `${baseUrl}/orders/${id}/listpending`,
+	getOrderSentList: (id) => `${baseUrl}/orders/${id}/listsent`,
+	getOrderDoneList: (id) => `${baseUrl}/orders/${id}/listdone`,
+	confirmOrder: (id) => `${baseUrl}/orders/konfirmasi/${id}`,
+	sentOrder: (id) => `${baseUrl}/orders/kirim/${id}`,
+	deleteOrder: (id) => `${baseUrl}/orders/deleteorder/${id}`,
+	detailOrder: (id) => `${baseUrl}/orders/detailOrder/${id}`,
+
+	// Admin Dashboard
+	getSuccessTransaction: `${baseUrl}/orders/successTransaction`,
+	getAllTransactions: `${baseUrl}/orders/allTransactions`,
 
 	// PRODUK
 	getProducts: (id, location) => `${baseUrl}/products/${id}/${location}`,
@@ -21,7 +34,7 @@ export const api = {
 	getCategories: `${baseUrl}/categories`,
 
 	// FAQ
-	getFaq: `${baseUrl}/kelolafaq`,
+	getFaq: `${baseUrl}/kelolafaq/datafaqs`,
 	addFaq: `${baseUrl}/kelolafaq/tambahFAQ`,
 	delFaq: (id) => `${baseUrl}/kelolafaq/${id}`,
 	detailFaq: (id) => `${baseUrl}/kelolafaq/detail/${id}`,
@@ -37,4 +50,7 @@ export const api = {
 	delArtikel: (id) => `${baseUrl}/artikels/${id}`,
 	detailArtikel: (id) => `${baseUrl}/artikels/detail/${id}`,
 	updateArtikel: (id) => `${baseUrl}/artikels/updateartikel/${id}`,
+
+	// FAQ
+	getFaqs: `${baseUrl}/kelolafaq/datafaqs`,
 };

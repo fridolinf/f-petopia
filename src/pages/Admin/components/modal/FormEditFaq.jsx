@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button } from 'antd';
-
 import UIBlocker from 'react-ui-blocker';
 import TextArea from 'antd/lib/input/TextArea';
+import ReactQuill from 'react-quill';
+import Quill from 'quill';
+import ImageCompress from 'quill-image-compress';
+
+Quill.register('modules/imageCompress', ImageCompress);
 
 const FormEditFaq = (props) => {
 	let data = props.data;
@@ -20,6 +24,12 @@ const FormEditFaq = (props) => {
 
 	let onCancel = props.onCancel;
 
+	const [textE, setTextE] = useState(undefined);
+
+	const handleChange = (value) => {
+		setTextE(value);
+	};
+
 	if (data.pertanyaan === undefined) {
 		return (
 			<UIBlocker
@@ -29,6 +39,49 @@ const FormEditFaq = (props) => {
 			/>
 		);
 	}
+
+	const modules = {
+		imageCompress: {
+			quality: 1, // default
+			maxWidth: 700, // default
+			maxHeight: 500, // default
+			imageType: 'image/jpeg', // default
+			debug: true, // default
+		},
+		toolbar: [
+			[{ header: [1, 2, false] }],
+			['bold', 'italic', 'underline', 'strike', 'blockquote'],
+			[
+				{ list: 'ordered' },
+				{ list: 'bullet' },
+				{ indent: '-1' },
+				{ indent: '+1' },
+			],
+			['link', 'image'],
+			['clean'],
+			[
+				{ align: '' },
+				{ align: 'center' },
+				{ align: 'right' },
+				{ align: 'justify' },
+			],
+		],
+	};
+
+	const formats = [
+		'header',
+		'bold',
+		'italic',
+		'underline',
+		'strike',
+		'blockquote',
+		'list',
+		'bullet',
+		'indent',
+		'link',
+		'image',
+		'align',
+	];
 
 	return (
 		<>
@@ -46,17 +99,39 @@ const FormEditFaq = (props) => {
 					label='Pertanyaan'
 					name='pertanyaan'
 					rules={[
-						{ required: true, message: 'Nama harus diisi!' },
+						{ required: true, message: 'Pertanyaan harus diisi!' },
 						{
-							min: 7,
-							message: 'Nama Produk harus lebih dari 7 huruf',
+							min: 10,
+							message: 'Pertanyaan harus lebih dari 10 huruf',
 						},
 					]}
+					a
 				>
 					<Input />
 				</Form.Item>
-				<Form.Item label='Jawaban' name='jawaban'>
-					<TextArea showCount maxLength={100} size='large' />
+				<Form.Item
+					label='Jawaban'
+					wrapperCol={13}
+					name='jawaban'
+					rules={[
+						{
+							required: true,
+							message: 'Jawaban harus diisi!',
+						},
+						{
+							min: 10,
+							message: 'Jawaban harus lebih dari 10 huruf',
+						},
+					]}
+					a
+				>
+					<ReactQuill
+						value={textE || ''}
+						onChange={(e) => handleChange(e)}
+						theme='snow'
+						modules={modules}
+						formats={formats}
+					/>
 				</Form.Item>
 				<Form.Item className='justify-content-end'>
 					<Button

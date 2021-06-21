@@ -12,7 +12,13 @@ const DetailFaq = (props) => {
 				</Descriptions.Item>
 			</Descriptions>
 			<Descriptions bordered layout='vertical'>
-				<Descriptions.Item label='Jawaban'>{data.jawaban}</Descriptions.Item>
+				<Descriptions.Item label='Jawaban'>
+					<div
+						dangerouslySetInnerHTML={{
+							__html: data.jawaban,
+						}}
+					></div>
+				</Descriptions.Item>
 			</Descriptions>
 		</>
 	);

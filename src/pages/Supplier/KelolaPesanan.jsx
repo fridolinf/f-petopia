@@ -1,15 +1,28 @@
 import React from 'react';
 import { Tabs, Badge } from 'antd';
-
 import TabPesananBaru from './components/Pesanan/TabPesananBaru';
-import TabDalamProses from './components/Pesanan/TabDalamProses';
-import TabTertunda from './components/Pesanan/TabTertunda';
-import TabPengiriman from './components/Pesanan/TabPengiriman';
+import TabPesananDikrim from './components/Pesanan/TabPesananDikirim';
+import TabPesananSelesai from './components/Pesanan/TabPesananSelesai';
+import { connect } from 'react-redux';
+import {
+	getOrderNewList,
+	getOrderSentList,
+	getOrderDoneList,
+} from '../../redux/admin/action/actionAdmin';
 
 const { TabPane } = Tabs;
 
 class KelolaPesanan extends React.Component {
-	state = { size: 'small' };
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+
+	componentDidMount() {
+		this.props.getOrderNewList();
+		this.props.getOrderSentList();
+		this.props.getOrderDoneList();
+	}
 
 	render() {
 		const { size } = this.state;
@@ -20,52 +33,54 @@ class KelolaPesanan extends React.Component {
 						tab={
 							<span>
 								Pesanan Baru
-								<Badge className='ml-1' count={11} overflowCount={10} />{' '}
+								{/* <Badge className='ml-1' count={11} overflowCount={10} />{' '} */}
 							</span>
 						}
 						key='1'
 					>
-						<TabPesananBaru />
+						<TabPesananBaru data={this.props.newOrders} />
 					</TabPane>
 
 					<TabPane
 						tab={
 							<span>
-								Dalam Proses
-								<Badge className='ml-1' count={11} overflowCount={10} />{' '}
+								Pesanan Diproses
+								{/* <Badge className='ml-1' count={11} overflowCount={10} />{' '} */}
 							</span>
 						}
 						key='2'
 					>
-						<TabDalamProses />
+						<TabPesananDikrim data={this.props.sentOrders} />
 					</TabPane>
 
 					<TabPane
 						tab={
 							<span>
-								Tertunda
-								<Badge className='ml-1' count={11} overflowCount={10} />{' '}
+								Pesanan Selesai
+								{/* <Badge className='ml-1' count={11} overflowCount={10} />{' '} */}
 							</span>
 						}
 						key='3'
 					>
-						<TabTertunda />
-					</TabPane>
-
-					<TabPane
-						tab={
-							<span>
-								Pengiriman
-								<Badge className='ml-1' count={11} overflowCount={10} />{' '}
-							</span>
-						}
-						key='4'
-					>
-						<TabPengiriman />
+						<TabPesananSelesai data={this.props.doneOrders} />
 					</TabPane>
 				</Tabs>
 			</div>
 		);
 	}
 }
-export default KelolaPesanan;
+const mapStateToProps = (state) => {
+	const {
+		newOrders,
+		sentOrders,
+		doneOrders,
+		loading,
+		error,
+	} = state.reducerAdmin;
+	return { newOrders, sentOrders, doneOrders, loading, error };
+};
+export default connect(mapStateToProps, {
+	getOrderNewList,
+	getOrderSentList,
+	getOrderDoneList,
+})(KelolaPesanan);

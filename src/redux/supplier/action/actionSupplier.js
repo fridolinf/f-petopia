@@ -1,9 +1,14 @@
 export const getDataSupplier = () => {
 	return { type: 'REQUEST_DATA_SUPPLIER' };
 };
+export const updateSupplier = (data, id) => {
+	return { type: 'REQUEST_UPDATE_SUPPLIER', payload: data, id };
+};
+
 export const getDataCategories = () => {
 	return { type: 'REQUEST_DATA_CATEGORIES' };
 };
+
 export const getDataProducts = (id) => {
 	return { type: 'REQUEST_DATA_PRODUCTS', id };
 };
@@ -22,6 +27,17 @@ export const addProducts = (data) => {
 export const updateProducts = (data, id) => {
 	return { type: 'REQUEST_UPDATE_PRODUCTS', payload: data, id };
 };
-export const addKategori = (data) => {
-	return { type: 'REQUEST_ADD_PRODUCTS', payload: data };
+
+// DASHBOARD
+export const getIncome = (id) => {
+	return { type: 'REQUEST_DATA_INCOME', id };
+};
+// export const getTransactions = (id) => {
+// 	return { type: 'REQUEST_DATA_TRANSACTIONS', id };
+// };
+
+// FAQ
+
+export const getFaqs = () => {
+	return { type: 'REQUEST_DATA_FAQS' };
 };

@@ -13,6 +13,9 @@ import UIBlocker from 'react-ui-blocker';
 import TambahArtikel from './modal/FormTambahArtikel';
 import FormEditArtikel from './modal/FormEditArtikel';
 import FormDetailArtikel from './modal/FormDetailArtikel';
+import moment from 'moment';
+import 'moment/locale/id';
+import { isLongText } from '../../../utils/utility';
 
 const sorter = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
@@ -131,7 +134,9 @@ class KelolaArtikel extends React.Component {
 
 				this.setState({ isModalAddArtikel: false });
 			} else {
-				swal('baik terimakasih');
+				swal('baik terimakasih', {
+					icon: 'success',
+				});
 			}
 		});
 	};
@@ -149,6 +154,7 @@ class KelolaArtikel extends React.Component {
 			isModalEditArtikel: false,
 			isModalDetailArtikel: false,
 		});
+		window.location.href = process.env.PUBLIC_URL + '/admin/kelolaartikel';
 	};
 
 	handleCancelEdit = () => {
@@ -177,12 +183,15 @@ class KelolaArtikel extends React.Component {
 			{
 				title: 'Deskripsi',
 				dataIndex: 'description',
+				render: (text) => isLongText(text, 100),
 				key: 'description',
 			},
 			{
 				title: 'Isi',
 				dataIndex: 'isi',
+				render: (text) => isLongText(text, 250),
 				key: 'isi',
+				elipsis: true,
 			},
 			{
 				title: 'Gambar',
@@ -194,6 +203,7 @@ class KelolaArtikel extends React.Component {
 				title: 'Tanggal_dibuat',
 				dataIndex: 'dateCreated',
 				key: 'dateCreated',
+				render: (text) => moment(text).format('LLLL'),
 				sorter: (a, b) => sorter(a.dateCreated, b.dateCreated),
 				sortDirections: ['descend', 'ascend'],
 			},

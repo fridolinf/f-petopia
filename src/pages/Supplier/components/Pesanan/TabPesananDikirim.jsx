@@ -1,9 +1,9 @@
 import React from 'react';
-import { Tabs, Table, Tag, Space } from 'antd';
+import { Tabs, Table, Tag, Space, Input } from 'antd';
+
 import {
-	getOrderNewList,
-	confirmOrder,
 	getOrderSentList,
+	sentOrder,
 } from '../../../../redux/admin/action/actionAdmin';
 import { connect } from 'react-redux';
 import UIBlocker from 'react-ui-blocker';
@@ -16,16 +16,10 @@ export const sorter1 = (a, b) =>
 
 const { TabPane } = Tabs;
 
-class TabPesananBaru extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			loading: false,
-		};
-	}
+class TabPesananDikirim extends React.Component {
 	state = { size: 'small' };
 
-	confirmNotif = (id) => {
+	sentNotif = (id) => {
 		swal({
 			title: 'Apakah anda yakin?',
 			text: 'Pesanan akan dikirim!',
@@ -34,13 +28,13 @@ class TabPesananBaru extends React.Component {
 			dangerMode: true,
 		}).then((willDelete) => {
 			if (willDelete) {
-				this.props.confirmOrder(id);
+				this.props.sentOrder(id);
 				swal('Pesanan berhasil dikirim', {
 					icon: 'success',
 				});
 				window.location.href =
 					process.env.PUBLIC_URL + '/supplier/kelolapesanan';
-				this.props.getOrderNewList();
+				this.props.getOrderSentList();
 			} else {
 				swal('baik terimakasih', {
 					icon: 'success',
@@ -52,7 +46,7 @@ class TabPesananBaru extends React.Component {
 	render() {
 		const { size } = this.state;
 
-		const columnPesananBaru = [
+		const columnPesananDikirim = [
 			{
 				title: 'Id Pesanan',
 				dataIndex: 'id',
@@ -64,7 +58,7 @@ class TabPesananBaru extends React.Component {
 				title: 'Status',
 				dataIndex: 'status',
 				key: 'status',
-				render: (text) => <Tag color='red'>{`Menunggu Konfirmasi`}</Tag>,
+				render: (text) => <Tag color='blue'>{`Diproses`}</Tag>,
 			},
 			{
 				title: 'Nama Produk',
@@ -111,15 +105,15 @@ class TabPesananBaru extends React.Component {
 				key: 'Aksi',
 				render: (text, record) => (
 					<Space size='small' direction='vertical'>
-						<button className='btn btn-info'>Detail</button>
+						{/* <button className='btn btn-info'>Detail</button> */}
 						<button
 							className='btn btn-primary'
 							onClick={(e) => {
 								e.stopPropagation();
-								this.confirmNotif(record.id);
+								this.sentNotif(record.id);
 							}}
 						>
-							Konfirmasi
+							Kirim
 						</button>
 					</Space>
 				),
@@ -131,26 +125,25 @@ class TabPesananBaru extends React.Component {
 				<UIBlocker
 					theme='bounce' // default
 					message=''
-					isVisible={this.props.loading}
-				/>
-				<h3>Data Pesanan Baru</h3>
-				<Table
-					columns={columnPesananBaru}
 					loading={this.state.loading}
-					dataSource={this.props.newOrders}
+				/>
+				<h3>Data Pesanan Dikirim</h3>
+				<Table
+					columns={columnPesananDikirim}
+					loading={this.state.loading}
+					dataSource={this.props.sentOrders}
 					scroll={{ x: 1300 }}
 				/>
 			</div>
 		);
 	}
 }
+
 const mapStateToProps = (state) => {
-	const { newOrders, loading, error } = state.reducerAdmin;
-	const { user } = state.reducerSupplier;
-	return { newOrders, user, loading, error };
+	const { sentOrders, loading, error } = state.reducerAdmin;
+	return { sentOrders, loading, error };
 };
 export default connect(mapStateToProps, {
-	getOrderNewList,
-	confirmOrder,
 	getOrderSentList,
-})(TabPesananBaru);
+	sentOrder,
+})(TabPesananDikirim);

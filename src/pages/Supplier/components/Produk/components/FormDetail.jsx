@@ -16,7 +16,20 @@ const FormDetail = (props) => {
 			</Descriptions>
 			<Descriptions bordered layout='vertical'>
 				<Descriptions.Item label='Deskripsi'>
-					{data.description}
+					<div
+						dangerouslySetInnerHTML={{
+							__html: data.description,
+						}}
+					></div>
+				</Descriptions.Item>
+			</Descriptions>
+			<Descriptions bordered layout='vertical'>
+				<Descriptions.Item label='Deskripsi Lebih'>
+					<div
+						dangerouslySetInnerHTML={{
+							__html: data.richDescription,
+						}}
+					></div>
 				</Descriptions.Item>
 			</Descriptions>
 			<Descriptions bordered layout='vertical'>

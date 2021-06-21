@@ -1,6 +1,13 @@
 const initialState = {
 	user: {},
 	products: [],
+	suppliers: {
+		address: '',
+		name: '',
+		email: '',
+		passwordHash: '',
+		phone: '',
+	},
 	product: {
 		name: '',
 		description: '',
@@ -16,6 +23,11 @@ const initialState = {
 		countInStock: '',
 		dateCreated: '',
 	},
+	totalPrice: 0,
+	totalQuantity: 0,
+	faqs: [],
+	income: [],
+	transactions: [],
 	categories: [],
 	location: 'habispakai',
 	loading: false,
@@ -126,6 +138,66 @@ const reducerSupplier = (state = initialState, action) => {
 				...state,
 				loading: false,
 				product: {},
+				error: null,
+			};
+		case 'REQUEST_DATA_INCOME':
+			return {
+				...state,
+				loading: true,
+				income: [],
+				error: null,
+			};
+		case 'GET_INCOME_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				income: action.payload,
+				error: null,
+			};
+		case 'GET_TOTAL_PRICE':
+			return {
+				...state,
+				totalPrice: action.payload.totalP,
+				totalQuantity: action.payload.totalQ,
+				error: null,
+			};
+		// case 'REQUEST_DATA_TRANSACTIONS':
+		// 	return {
+		// 		...state,
+		// 		loading: true,
+		// 		transactions: [],
+		// 		error: null,
+		// 	};
+		// case 'GET_TRANSACTIONS_SUCCESS':
+		// 	return {
+		// 		...state,
+		// 		loading: false,
+		// 		transactions: [...state.transactions, action.payload],
+		// 		error: null,
+		// 	};
+		case 'REQUEST_DATA_FAQS':
+			return {
+				...state,
+				loading: true,
+				error: null,
+			};
+		case 'GET_FAQS_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				faqs: action.payload,
+				error: null,
+			};
+		case 'REQUEST_UPDATE_SUPPLIER':
+			return {
+				...state,
+				loading: true,
+			};
+		case 'UPDATE_SUPPLIER_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				suppliers: {},
 				error: null,
 			};
 	}

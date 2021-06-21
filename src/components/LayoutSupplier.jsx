@@ -1,11 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Layout, Menu, Avatar, Typography, Badge, Button } from 'antd';
+import { Layout, Menu, Avatar, Typography, Button } from 'antd';
 import {
 	MenuUnfoldOutlined,
 	MenuFoldOutlined,
 	UserOutlined,
-	MailOutlined,
 	DashboardOutlined,
 	ShoppingCartOutlined,
 	ShopOutlined,
@@ -13,10 +12,36 @@ import {
 import { session } from '../utils/session';
 import { getDataSupplier } from '../redux/supplier/action/actionSupplier';
 import { connect } from 'react-redux';
-
+import { withRouter } from 'react-router-dom';
 const { Header, Sider, Content } = Layout;
-
 const { Text } = Typography;
+
+const menuPindah = [
+	{
+		key: '1',
+		label: 'Profile',
+		path: '/supplier/profile',
+		icon: <UserOutlined />,
+	},
+	{
+		key: '2',
+		label: 'Dashboard',
+		path: '/supplier/dashboard',
+		icon: <DashboardOutlined />,
+	},
+	{
+		key: '3',
+		label: 'KelolaPesanan',
+		path: '/supplier/kelolapesanan',
+		icon: <ShoppingCartOutlined />,
+	},
+	{
+		key: '4',
+		label: 'KelolaProduk',
+		path: '/supplier/kelolaproduk',
+		icon: <ShopOutlined />,
+	},
+];
 
 class LayoutSupplier extends React.Component {
 	constructor(props) {
@@ -24,11 +49,27 @@ class LayoutSupplier extends React.Component {
 		this.state = {
 			auth: true,
 			collapsed: false,
+			selectedKeys: [this.props.location.pathname],
 		};
 	}
 
-	componentDidMount() {
-		this.props.getDataSupplier();
+	// componentDidMount() {
+	// 	this.props.getDataSupplier();
+	// 	this.setState({
+	// 		selectedKeys: menuPindah.find(
+	// 			(_item) => _item.path === this.props.location.pathname
+	// 		).key,
+	// 	});
+	// }
+
+	componentDidUpdate(previousProps, previousState) {
+		if (previousState.selectedKeys !== this.state.selectedKeys) {
+			this.setState({
+				selectedKeys: menuPindah.find(
+					(_item) => _item.path === this.props.location.pathname
+				).key,
+			});
+		}
 	}
 
 	toggle = () => {
@@ -39,7 +80,11 @@ class LayoutSupplier extends React.Component {
 
 	onlogout = () => {
 		session(null);
-		window.location.href = process.env.PUBLIC_URL + '/login';
+		window.location.href = '/login';
+	};
+
+	onClickMenu = (item) => {
+		const path = menuPindah.find((_item) => _item.path === item.path);
 	};
 
 	render() {
@@ -54,62 +99,54 @@ class LayoutSupplier extends React.Component {
 						collapsed={this.state.collapsed}
 					>
 						{this.state.collapsed ? (
-							<a href='/'>
-								{' '}
-								<Avatar className='mt-3 ml-3' size={40}></Avatar>
-							</a>
+							<div className='ml-2 d-flex mb-2'>
+								<span style={{ marginTop: 20 }}>
+									<Text style={{ color: 'black' }}></Text>
+								</span>
+							</div>
 						) : (
 							<div className='ml-2 d-flex mb-2'>
-								<Avatar className='mt-3 mr-3' size={40}></Avatar>
-								<span style={{ marginTop: 20 }}>
-									<Text style={{ color: 'white' }}>{this.props.user.name}</Text>
+								<span
+									style={{
+										marginTop: 20,
+										marginLeft: 10,
+										textShadow: '2px 2px 5px blue',
+										fontWeight: 'bold',
+									}}
+								>
+									<Text style={{ color: 'black' }}>
+										{this.props.user.marketName}
+									</Text>
 								</span>
 							</div>
 						)}
 						<Menu
+							onClick={this.onClickMenu}
+							selectedKeys={[this.props.location.pathname]}
 							style={{ background: '#74B3EE' }}
 							mode='inline'
-							defaultSelectedKeys={['1']}
 						>
-							<Menu.Item key='1' icon={<UserOutlined />}>
-								<NavLink
-									className='nav-text'
-									style={{ color: 'black' }}
-									to='/supplier/profile'
-								>
-									Profile
-								</NavLink>
-							</Menu.Item>
-							<Menu.Item key='2' icon={<DashboardOutlined />}>
-								<NavLink
-									className='nav-text'
-									style={{ color: 'black' }}
-									to='/supplier/dashboard'
-								>
-									Dashboard
-								</NavLink>
-							</Menu.Item>
-							<Menu.Item key='3' icon={<ShoppingCartOutlined />}>
-								<NavLink
-									className='nav-text'
-									style={{ color: 'black' }}
-									to='/supplier/kelolapesanan'
-								>
-									Kelola Pesanan
-								</NavLink>
-							</Menu.Item>
-							<Menu.Item key='4' icon={<ShopOutlined />}>
-								<NavLink
-									className='nav-text'
-									style={{ color: 'black' }}
-									to='/supplier/kelolaproduk'
-								>
-									Kelola Produk
-								</NavLink>
-							</Menu.Item>
+							{menuPindah.map((item) => (
+								<>
+									<Menu.Item key={item.path} icon={item.icon}>
+										<NavLink
+											className='nav-text'
+											style={{ color: 'black' }}
+											to={item.path}
+										>
+											{item.label}
+										</NavLink>
+									</Menu.Item>
+								</>
+							))}
 						</Menu>
 						<Button
-							style={{ width: '200px', background: '#74B3EE', color: 'black' }}
+							style={{
+								width: '200px',
+								background: '#74B3EE',
+								color: 'black',
+								zIndex: 1,
+							}}
 							className='fixed-bottom'
 							onClick={this.onlogout}
 						>
@@ -122,18 +159,15 @@ class LayoutSupplier extends React.Component {
 							style={{ padding: 0, background: '#74B3EE' }}
 						>
 							<div className={'float-right mr-4'}>
-								<a href='/' className='mr-3' style={{ color: 'white' }}>
-									Help guides
-								</a>
-								<a href='/'>
-									<span style={{ color: 'white' }} className='mr-1 mt-5'>
-										Inbox
-									</span>
-									<Badge count={5}>
-										<MailOutlined
-											style={{ fontSize: '30px', color: 'white' }}
-										/>
-									</Badge>
+								<a href='/supplier/faq'>
+									<Text
+										strong
+										style={{ color: 'black', fontSize: '1.2em' }}
+										className='mr-1'
+										underline='true'
+									>
+										FAQ
+									</Text>
 								</a>
 							</div>
 							{React.createElement(
@@ -166,4 +200,6 @@ const mapStateToProps = (state) => {
 	return { user, loading, error };
 };
 
-export default connect(mapStateToProps, { getDataSupplier })(LayoutSupplier);
+export default connect(mapStateToProps, { getDataSupplier })(
+	withRouter(LayoutSupplier)
+);

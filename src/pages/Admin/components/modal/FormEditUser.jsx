@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Upload, Select, Row, Col, List } from 'antd';
+import React, { useEffect } from 'react';
+import { Form, Input, Button, Select, Upload, List, Row, Col } from 'antd';
+
+import UIBlocker from 'react-ui-blocker';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import TextArea from 'antd/lib/input/TextArea';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDataCategories } from '../../../../../redux/supplier/action/actionSupplier';
-import TextArea from 'antd/lib/input/TextArea';
-import ReactQuill from 'react-quill';
 
-const FormTambahP = (props) => {
+const FormEdit = (props) => {
+	let data = props.data;
+
 	const selector = useSelector((state) => state.reducerSupplier);
 	const dispatch = useDispatch();
 	useEffect(() => {
@@ -32,47 +35,6 @@ const FormTambahP = (props) => {
 
 	let onCancel = props.onCancel;
 
-	const [textE, setTextE] = useState(undefined);
-
-	const handleChange = (value) => {
-		setTextE(value);
-	};
-
-	const modules = {
-		toolbar: [
-			[{ header: [1, 2, false] }],
-			['bold', 'italic', 'underline', 'strike', 'blockquote'],
-			[
-				{ list: 'ordered' },
-				{ list: 'bullet' },
-				{ indent: '-1' },
-				{ indent: '+1' },
-			],
-			['clean'],
-			[
-				{ align: '' },
-				{ align: 'center' },
-				{ align: 'right' },
-				{ align: 'justify' },
-			],
-		],
-	};
-
-	const formats = [
-		'header',
-		'bold',
-		'italic',
-		'underline',
-		'strike',
-		'blockquote',
-		'list',
-		'bullet',
-		'indent',
-		'link',
-		'image',
-		'align',
-	];
-
 	const uploadButton = (
 		<div>
 			{props.loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -80,24 +42,35 @@ const FormTambahP = (props) => {
 		</div>
 	);
 
+	if (data.name === undefined) {
+		return (
+			<UIBlocker
+				theme='bounce' // default
+				isVisible={true}
+				message=''
+			/>
+		);
+	}
+
 	return (
 		<>
 			<Form
 				name='validate_other'
 				{...formItemLayout}
 				onFinish={onConfirm}
-				initialValues={{
-					description: '',
-					richDescription: '',
-				}}
 				autoComplete='off'
+				initialValues={{
+					name: data.name,
+					description: data.description,
+					richDescription: data.richDescription,
+					brand: data.brand,
+					price: data.price,
+					category: data.category._id,
+					countInStock: data.countInStock,
+				}}
 			>
 				<List
-					header={
-						<div>
-							Nama<span style={{ color: 'red' }}>*</span>
-						</div>
-					}
+					header={<div>Nama</div>}
 					size='small'
 					bordered
 					style={{ backgroundColor: '#ffffff' }}
@@ -123,18 +96,13 @@ const FormTambahP = (props) => {
 				</List>
 
 				<List
-					header={
-						<div>
-							Deskripsi<span style={{ color: 'red' }}>*</span>
-						</div>
-					}
+					header={<div>Deskripsi</div>}
 					size='small'
 					bordered
 					style={{ backgroundColor: '#ffffff' }}
 					className='mb-4'
 				>
 					<Form.Item
-						wrapperCol={13}
 						name='description'
 						className='mt-1 justify-content-center'
 						rules={[
@@ -146,50 +114,33 @@ const FormTambahP = (props) => {
 								min: 20,
 								message: 'Nama Produk harus lebih dari 20 huruf',
 							},
+							{
+								max: 300,
+								message: 'Deskripsi produk tidak bisa lebih dari 100 huruf',
+							},
 						]}
 						a
 					>
-						<ReactQuill
-							value={textE || ''}
-							onChange={(e) => handleChange(e)}
-							theme='snow'
-							modules={modules}
-							formats={formats}
-						/>
+						<TextArea showCount maxLength={300} size='large' />
 					</Form.Item>
 				</List>
 
 				<List
-					header={<div>Deskripsi Lebih</div>}
+					header={<div>Deskripsi Penuh</div>}
 					size='small'
 					bordered
 					style={{ backgroundColor: '#ffffff' }}
 					className='mb-4'
 				>
 					<Form.Item
-						wrapperCol={13}
 						name='richDescription'
 						className='mt-1 justify-content-center'
 					>
-						<ReactQuill
-							value={textE || ''}
-							onChange={(e) => handleChange(e)}
-							theme='snow'
-							modules={modules}
-							formats={formats}
-						/>
+						<TextArea size='large' />
 					</Form.Item>
 				</List>
 
-				<List
-					header={
-						<div>
-							Upload Gambar<span style={{ color: 'red' }}>*</span>
-						</div>
-					}
-					size='small'
-					bordered
-				>
+				<List header={<div>Upload Gambar</div>} size='small' bordered>
 					<Row gutter={24} justify='center' className='mt-4'>
 						<Col className='gutter-row '>
 							<Form.Item
@@ -292,11 +243,7 @@ const FormTambahP = (props) => {
 				</List>
 
 				<List
-					header={
-						<div>
-							Merk<span style={{ color: 'red' }}>*</span>
-						</div>
-					}
+					header={<div>Merk</div>}
 					size='small'
 					bordered
 					style={{ backgroundColor: '#ffffff' }}
@@ -322,11 +269,7 @@ const FormTambahP = (props) => {
 				</List>
 
 				<List
-					header={
-						<div>
-							Harga<span style={{ color: 'red' }}>*</span>
-						</div>
-					}
+					header={<div>Harga</div>}
 					size='small'
 					bordered
 					style={{ backgroundColor: '#ffffff' }}
@@ -352,11 +295,7 @@ const FormTambahP = (props) => {
 				</List>
 
 				<List
-					header={
-						<div>
-							Kategori<span style={{ color: 'red' }}>*</span>
-						</div>
-					}
+					header={<div>Kategori</div>}
 					size='small'
 					bordered
 					style={{ backgroundColor: '#ffffff' }}
@@ -383,11 +322,7 @@ const FormTambahP = (props) => {
 				</List>
 
 				<List
-					header={
-						<div>
-							Stok<span style={{ color: 'red' }}>*</span>
-						</div>
-					}
+					header={<div>Stok</div>}
 					size='small'
 					bordered
 					style={{ backgroundColor: '#ffffff' }}
@@ -436,4 +371,4 @@ const FormTambahP = (props) => {
 	);
 };
 
-export default FormTambahP;
+export default FormEdit;
