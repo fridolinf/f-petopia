@@ -31,7 +31,7 @@ function* login({ payload: { email, password } }) {
 	try {
 		let response = yield call(
 			fetchJSON,
-			'http://localhost:3001/api/v1/users/loginwebsite',
+			'https://petopia-b.herokuapp.com/api/v1/users/loginwebsite',
 			options
 		);
 		if (response.error === 0) {

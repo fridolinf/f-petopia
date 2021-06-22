@@ -114,6 +114,11 @@ class LayoutSupplier extends React.Component {
 										fontWeight: 'bold',
 									}}
 								>
+									<Avatar
+										size='large'
+										className='mr-3'
+										src={this.props.user.image}
+									/>
 									<Text style={{ color: 'black' }}>
 										{this.props.user.marketName}
 									</Text>

@@ -212,7 +212,7 @@ function* getDataUsers(action) {
 	const token = getLoggedInUser().token;
 	try {
 		const res = yield axios.get(
-			`http://localhost:3001/api/v1/kelolauser/false`,
+			`https://petopia-b.herokuapp.com/api/v1/kelolauser/false`,
 
 			{
 				headers: {
@@ -254,7 +254,7 @@ function* getDataUsersSupplier(action) {
 	const token = getLoggedInUser().token;
 	try {
 		const res = yield axios.get(
-			`http://localhost:3001/api/v1/kelolauser/true`,
+			`https://petopia-b.herokuapp.com/api/v1/kelolauser/true`,
 
 			{
 				headers: {
@@ -297,7 +297,7 @@ function* getDataVerifikasi(action) {
 	const token = getLoggedInUser().token;
 	try {
 		const res = yield axios.get(
-			`http://localhost:3001/api/v1/kelolauser/verifikasi/false`,
+			`https://petopia-b.herokuapp.com/api/v1/kelolauser/verifikasi/false`,
 
 			{
 				headers: {

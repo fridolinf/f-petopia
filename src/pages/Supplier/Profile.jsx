@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Row, Input, Button, Modal, Card, Avatar } from 'antd';
+import { Form, Row, Input, Button, Modal, Card, Avatar, Image } from 'antd';
 import {
 	getDataSupplier,
 	updateSupplier,
@@ -22,13 +22,13 @@ class Profile extends React.Component {
 			email: this.props.user.email,
 			passwordHash: this.props.user.passwordHash,
 			phone: this.props.user.phone,
+			image: this.props.user.image,
 		};
 	}
 
 	componentDidMount() {
 		this.props.getDataSupplier();
 	}
-
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.user !== this.props.user) {
 			this.setState({
@@ -38,6 +38,7 @@ class Profile extends React.Component {
 				email: nextProps.user.email,
 				passwordHash: nextProps.user.passwordHash,
 				phone: nextProps.user.phone,
+				image: nextProps.user.image,
 			});
 		}
 	}
@@ -61,6 +62,7 @@ class Profile extends React.Component {
 	};
 
 	render() {
+		console.log(this.state.image);
 		return (
 			<div>
 				<UIBlocker
@@ -68,7 +70,6 @@ class Profile extends React.Component {
 					isVisible={this.props.loading}
 					message=''
 				/>
-
 				<Row>
 					<Col lg={8}>
 						<Card hoverable='true'>
@@ -85,6 +86,9 @@ class Profile extends React.Component {
 								layout='vertical'
 								onFinish={this.onSubmitHandlerEdit}
 							>
+								<div className='text-center mx-auto'>
+									<Image src={this.state.image} width={250} height={250} />
+								</div>
 								<Form.Item label='Nama'>
 									<Form.Item
 										name='name'
