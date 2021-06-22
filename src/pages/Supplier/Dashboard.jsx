@@ -169,7 +169,13 @@ class Dashboard extends Component {
 	}
 }
 const mapStateToProps = (state) => {
-	const {	income, totalPrice, totalQuantity, loading, error } = state.reducerSupplier;
+	const {
+		income,
+		totalPrice,
+		totalQuantity,
+		loading,
+		error,
+	} = state.reducerSupplier;
 	return { income, totalPrice, totalQuantity, loading, error };
 };
 export default connect(mapStateToProps, {
