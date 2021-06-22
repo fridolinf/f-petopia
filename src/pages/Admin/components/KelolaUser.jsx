@@ -254,13 +254,7 @@ class KelolaUser extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	const {
-		users,
-		usersSupplier,
-		supplierDetail,
-		loading,
-		error,
-	} = state.reducerAdmin;
+	const {users,	usersSupplier,	supplierDetail, loading, error } = state.reducerAdmin;
 	return { users, usersSupplier, supplierDetail, loading, error };
 };
 export default connect(mapStateToProps, {

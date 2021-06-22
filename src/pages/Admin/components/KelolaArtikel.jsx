@@ -166,9 +166,7 @@ class KelolaArtikel extends React.Component {
 
 	render() {
 		const {
-			isModalAddArtikel,
-			isModalEditArtikel,
-			isModalDetailArtikel,
+			isModalAddArtikel,isModalEditArtikel,isModalDetailArtikel,
 		} = this.state;
 
 		// Table Artikel
