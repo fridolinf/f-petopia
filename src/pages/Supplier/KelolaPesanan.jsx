@@ -70,13 +70,7 @@ class KelolaPesanan extends React.Component {
 	}
 }
 const mapStateToProps = (state) => {
-	const {
-		newOrders,
-		sentOrders,
-		doneOrders,
-		loading,
-		error,
-	} = state.reducerAdmin;
+	const { newOrders, sentOrders, doneOrders, loading, error } = state.reducerAdmin;
 	return { newOrders, sentOrders, doneOrders, loading, error };
 };
 export default connect(mapStateToProps, {

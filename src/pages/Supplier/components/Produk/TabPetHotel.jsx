@@ -229,11 +229,7 @@ class TabPetHotel extends React.Component {
 	};
 
 	render() {
-		const {
-			isModalTambahPetHotel,
-			isModalEditHotel,
-			isModalDetailHotel,
-		} = this.state;
+		const { isModalTambahPetHotel, isModalEditHotel, isModalDetailHotel } = this.state;
 
 		// Table Pet Hotel
 		const columnsPetHotel = [

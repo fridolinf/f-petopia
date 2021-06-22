@@ -227,11 +227,7 @@ class TabHabisPakai extends React.Component {
 	};
 
 	render() {
-		const {
-			isModalAddProduk,
-			isModalEditHabis,
-			isModalDetailHabis,
-		} = this.state;
+		const { isModalAddProduk, isModalEditHabis, isModalDetailHabis } = this.state;
 
 		// Table Habis Pakai
 		const columnsHabisPakai = [

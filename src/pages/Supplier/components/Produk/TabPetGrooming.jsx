@@ -229,11 +229,7 @@ class TabPetGrooming extends React.Component {
 	};
 
 	render() {
-		const {
-			isModalTambahPetG,
-			isModalEditGrooming,
-			isModalDetailGrooming,
-		} = this.state;
+		const { isModalTambahPetG, isModalEditGrooming, isModalDetailGrooming } = this.state;
 
 		// Table Pet Grooming
 		const columnsPetGrooming = [
