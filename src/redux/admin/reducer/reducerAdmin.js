@@ -423,7 +423,7 @@ const reducerAdmin = (state = initialState, action) => {
 			return {
 				...state,
 				loading: false,
-				allUser: action.payload.userCount,
+				allUser: action.payload,
 				error: null,
 			};
 	}

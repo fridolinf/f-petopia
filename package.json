@@ -54,6 +54,7 @@
   "devDependencies": {
     "eslint-config-prettier": "^8.2.0",
     "eslint-plugin-prettier": "^3.3.1",
+    "netlify-cli": "^3.38.7",
     "prettier": "^2.2.1"
   }
 }
