@@ -3,7 +3,6 @@ import { Descriptions, Image, Col } from 'antd';
 
 const DetailOrder = (props) => {
 	let data = props.data;
-	console.log(data);
 	return (
 		<>
 			<Col>

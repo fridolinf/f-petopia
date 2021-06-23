@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const EditUser = (props) => {
 	let data = props.data;
-	console.log(data);
 	const selector = useSelector((state) => state.reducerSupplier);
 	const dispatch = useDispatch();
 	useEffect(() => {}, [null]);
