@@ -1,6 +1,3 @@
-export const getDetailOrder = (id) => {
-	return { type: 'REQUEST_DETAIL_ORDER', id };
-};
 export const getDataSupplier = () => {
 	return { type: 'REQUEST_DATA_SUPPLIER' };
 };

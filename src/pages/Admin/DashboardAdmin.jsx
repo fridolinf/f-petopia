@@ -14,7 +14,10 @@ import {
 } from 'recharts';
 import { connect } from 'react-redux';
 import UIBlocker from 'react-ui-blocker';
-import { getSuccessTransaction } from '../../redux/admin/action/actionAdmin';
+import {
+	getSuccessTransaction,
+	getCountUser,
+} from '../../redux/admin/action/actionAdmin';
 
 class DashboardAdmin extends Component {
 	constructor(props) {
@@ -30,7 +33,8 @@ class DashboardAdmin extends Component {
 
 	render() {
 		const { successTransaction } = this.props;
-
+		console.log(getCountUser);
+		console.log(this.props.allUser);
 		return (
 			<div>
 				<UIBlocker
@@ -57,8 +61,25 @@ class DashboardAdmin extends Component {
 									</p>
 								</Descriptions.Item>
 							</Descriptions>
+						</Card.Grid>{' '}
+						<Card.Grid
+							style={{ width: '30%', height: 'auto' }}
+							className='mr-4'
+						>
+							<Descriptions
+								column={{ xxl: 4, xl: 1, lg: 3, md: 3, sm: 2, xs: 1 }}
+								title='Total Pendapatan'
+								layout='vertical'
+								bordered
+							>
+								<Descriptions.Item>
+									<p style={{ fontSize: '2em', fontWeight: 'bold' }}>
+										{'Rp'}
+										{this.props.allUser}
+									</p>
+								</Descriptions.Item>
+							</Descriptions>
 						</Card.Grid>
-
 						<Card.Grid
 							className='ml-4'
 							style={{ width: '65%', height: 'auto' }}
@@ -105,9 +126,16 @@ class DashboardAdmin extends Component {
 }
 
 const mapStateToProps = (state) => {
-	const { successTransaction, totalT, loading, error } = state.reducerAdmin;
-	return { successTransaction, totalT, loading, error };
+	const {
+		successTransaction,
+		allUser,
+		totalT,
+		loading,
+		error,
+	} = state.reducerAdmin;
+	return { successTransaction, allUser, totalT, loading, error };
 };
 export default connect(mapStateToProps, {
 	getSuccessTransaction,
+	getCountUser,
 })(DashboardAdmin);

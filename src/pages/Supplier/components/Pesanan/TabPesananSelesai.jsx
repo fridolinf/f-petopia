@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Table, Tag, Space, Input } from 'antd';
+import { Tabs, Table, Tag } from 'antd';
 
 import {
 	getOrderDoneList,
@@ -13,8 +13,6 @@ import 'moment/locale/id';
 
 export const sorter1 = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
-
-const { TabPane } = Tabs;
 
 class TabPesananSelesai extends React.Component {
 	state = { size: 'small' };
@@ -45,8 +43,6 @@ class TabPesananSelesai extends React.Component {
 	};
 
 	render() {
-		const { size } = this.state;
-
 		const columnPesananSelesai = [
 			{
 				title: 'Id Pesanan',

@@ -5,6 +5,7 @@ const initialState = {
 	doneOrders: [],
 	detailOrder: {},
 	successTransaction: [],
+	allUser: 0,
 	totalT: 0,
 	allTransactions: [],
 	completeOrders: [],
@@ -416,6 +417,13 @@ const reducerAdmin = (state = initialState, action) => {
 					phone: action.payload.phone,
 					dateOrdered: action.payload.dateOrdered,
 				},
+				error: null,
+			};
+		case 'GET_COUNT_USER_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				allUser: action.payload.userCount,
 				error: null,
 			};
 	}

@@ -88,3 +88,8 @@ export const getSuccessTransaction = () => {
 export const getAllTransactions = () => {
 	return { type: 'REQUEST_ALL_TRANSACTIONS' };
 };
+
+// COUNT
+export const getCountUser = () => {
+	return { type: 'REQUEST_COUNT_USER' };
+};

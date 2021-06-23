@@ -491,6 +491,21 @@ function* updateArtikel(action) {
 	} catch (e) {}
 }
 
+function* getCountUser(action) {
+	const token = getLoggedInUser().token;
+	try {
+		const res = yield axios.get(`${api.countUser}`, {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + token,
+			},
+		});
+		// const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
+		// yield call(delay, 1000);
+		yield put({ type: 'GET_COUNT_USER_SUCCESS', payload: res.data });
+	} catch (e) {}
+}
+
 // Watch Order
 function* watchOrderNewList() {
 	yield takeEvery('REQUEST_ORDER_NEW_LIST', getOrderNewList);
@@ -583,6 +598,11 @@ function* watchUpdateArtikel() {
 	yield takeEvery('REQUEST_UPDATE_ARTIKEL', updateArtikel);
 }
 
+// COUNT
+function* watchgetCountUser() {
+	yield takeEvery('REQUEST_COUNT_USER', getCountUser);
+}
+
 // YIELD
 function* adminSaga() {
 	yield all([
@@ -612,6 +632,7 @@ function* adminSaga() {
 		fork(watchSuccessTransaction),
 		fork(watchAllTransactions),
 		fork(watchDetailOrder),
+		fork(watchgetCountUser),
 	]);
 }
 export default adminSaga;

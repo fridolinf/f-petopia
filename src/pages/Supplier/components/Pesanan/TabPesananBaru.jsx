@@ -15,8 +15,6 @@ import DetailOrder from '../../../Admin/components/modal/DetailOrder';
 export const sorter1 = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
 
-const { TabPane } = Tabs;
-
 class TabPesananBaru extends React.Component {
 	constructor(props) {
 		super(props);
