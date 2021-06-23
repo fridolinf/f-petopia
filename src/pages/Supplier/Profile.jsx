@@ -69,7 +69,7 @@ class Profile extends React.Component {
 					isVisible={this.props.loading}
 					message=''
 				/>
-				<Row>
+				<Row className='justify-content-center'>
 					<Col lg={8}>
 						<Card hoverable='true'>
 							<Form
@@ -163,15 +163,6 @@ class Profile extends React.Component {
 									</Button>
 								</Form.Item>
 							</Form>
-						</Card>
-					</Col>
-					<Col lg={4}>
-						<Card hoverable='true' bordered={false}>
-							<Avatar
-								style={{ width: '100%', height: 'auto' }}
-								shape='square'
-								src={cobasvg}
-							/>
 						</Card>
 					</Col>
 				</Row>
