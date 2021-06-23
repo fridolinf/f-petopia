@@ -11,7 +11,7 @@ import UIBlocker from 'react-ui-blocker';
 import swal from 'sweetalert';
 import moment from 'moment';
 import 'moment/locale/id';
-import DetailOrder from './modal/DetailOrder';
+import DetailOrder from '../../../Admin/components/modal/DetailOrder';
 export const sorter1 = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
 
