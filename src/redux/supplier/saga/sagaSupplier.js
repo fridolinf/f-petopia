@@ -23,9 +23,7 @@ function* updateSupplier(action) {
 		yield put({ type: 'UPDATE_SUPPLIER_SUCCESS', payload: res.data });
 		yield* getData();
 		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* getIncome(action) {
@@ -57,9 +55,7 @@ function* getIncome(action) {
 		if (_data === undefined || _data.length === 0) {
 		} else {
 		}
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 // function* getTransactions(action) {
@@ -103,7 +99,7 @@ function* getIncome(action) {
 // 			// console.log(filtered2, 'filtered 2');
 // 		}
 // 	} catch (e) {
-// 		console.log(e);
+//
 // 	}
 // }
 
@@ -121,9 +117,7 @@ function* getFaqs(action) {
 			}
 		);
 		yield put({ type: 'GET_FAQS_SUCCESS', payload: res.data });
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* getDataCategories(action) {
@@ -171,9 +165,7 @@ function* getDataProducts(action) {
 			}
 		);
 		yield put({ type: 'GET_DATA_PRODUCTS_SUCCESS', payload: res.data });
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* getDetailProducts(action) {
@@ -190,9 +182,7 @@ function* getDetailProducts(action) {
 			}
 		);
 		yield put({ type: 'GET_DETAIL_P_SUCCESS', payload: res.data });
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* delProducts(action) {
@@ -211,9 +201,7 @@ function* delProducts(action) {
 		yield put({ type: 'DELETE_PRODUCTS_SUCCESS', payload: res.data });
 		yield* getDataProducts();
 		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* addProducts(action) {
@@ -233,9 +221,7 @@ function* addProducts(action) {
 		);
 		yield put({ type: 'ADD_PRODUCTS_SUCCESS', payload: res.data });
 		yield* getDataProducts();
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* updateProducts(action) {
@@ -256,9 +242,7 @@ function* updateProducts(action) {
 		yield put({ type: 'UPDATE_PRODUCTS_SUCCESS', payload: res.data });
 		yield* getDataProducts();
 		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* watchGetDataCategories() {

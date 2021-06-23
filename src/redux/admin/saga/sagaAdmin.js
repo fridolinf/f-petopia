@@ -34,9 +34,7 @@ function* getSuccessTransaction(action) {
 		if (_data === undefined || _data.length === 0) {
 		} else {
 		}
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* getAllTransactions(action) {
@@ -49,9 +47,7 @@ function* getAllTransactions(action) {
 			},
 		});
 		yield put({ type: 'GET_ALL_TRANSACTIONS_SUCCESS', payload: res.data });
-	} catch (e) {
-		console.log(e.message);
-	}
+	} catch (e) {}
 }
 
 // Dashboard
@@ -73,10 +69,7 @@ function* detailOrder(action) {
 			}
 		);
 		yield put({ type: 'GET_DETAIL_ORDER_SUCCESS', payload: res.data });
-		console.log(res.data);
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 // OrderPending
@@ -94,9 +87,7 @@ function* getOrderNewList(action) {
 			}
 		);
 		yield put({ type: 'GET_ORDER_NEW_LIST_SUCCESS', payload: res.data });
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 // Order Terkirim
@@ -114,10 +105,7 @@ function* getOrderSentList(status) {
 			}
 		);
 		yield put({ type: 'GET_ORDER_SENT_LIST_SUCCESS', payload: res.data });
-		console.log(res.data, 'TERKIRIM');
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 // Order Selesai
@@ -135,10 +123,7 @@ function* getOrderDoneList(status) {
 			}
 		);
 		yield put({ type: 'GET_ORDER_DONE_LIST_SUCCESS', payload: res.data });
-		console.log(res.data);
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 // Button Konfirmasi
@@ -158,9 +143,7 @@ function* confirmOrder(action) {
 			}
 		);
 		yield put({ type: 'GET_CONFIRM_ORDER_SUCCESS', payload: res.data });
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 // Button Kirim
@@ -180,9 +163,7 @@ function* sentOrder(action) {
 			}
 		);
 		yield put({ type: 'GET_SENT_ORDER_SUCCESS', payload: res.data });
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* deleteOrder(action) {
@@ -200,9 +181,7 @@ function* deleteOrder(action) {
 		);
 		yield put({ type: 'DELETE_ORDERS_SUCCESS', payload: res.data });
 		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 // BATAS BAWAH ORDER
@@ -222,10 +201,7 @@ function* getDataUsers(action) {
 			}
 		);
 		yield put({ type: 'GET_DATA_USERS_SUCCESS', payload: res.data.data });
-		console.log(res.data);
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* delUser(action) {
@@ -244,9 +220,7 @@ function* delUser(action) {
 		yield put({ type: 'DELETE_USER_SUCCESS', payload: res.data });
 		yield* getDataUsers();
 		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 // SUPPLIER
@@ -267,9 +241,7 @@ function* getDataUsersSupplier(action) {
 			type: 'GET_DATA_USERS_SUPPLIER_SUCCESS',
 			payload: res.data.data,
 		});
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* getDetailSupplier(action) {
@@ -285,11 +257,8 @@ function* getDetailSupplier(action) {
 				},
 			}
 		);
-		console.log(res.data);
 		yield put({ type: 'GET_DETAIL_SUPPLIER', payload: res.data });
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 // Verifikasi
@@ -307,9 +276,7 @@ function* getDataVerifikasi(action) {
 			}
 		);
 		yield put({ type: 'GET_DATA_VERIFIKASI_SUCCESS', payload: res.data });
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* tolakDataVerifikasi(action) {
@@ -327,9 +294,7 @@ function* tolakDataVerifikasi(action) {
 		);
 		yield put({ type: 'DELETE_FAQ_SUCCESS', payload: res.data });
 		yield* getDataVerifikasi();
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* accDataVerifikasi(action) {
@@ -349,9 +314,7 @@ function* accDataVerifikasi(action) {
 		);
 		yield put({ type: 'ACC_VERIFIKASI_SUCCESS', payload: res.data });
 		yield* getDataVerifikasi();
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 // FAQ
@@ -365,9 +328,7 @@ function* getDataFaq(action) {
 			},
 		});
 		yield put({ type: 'GET_DATA_FAQ_SUCCESS', payload: res.data });
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* addFaq(action) {
@@ -383,9 +344,7 @@ function* addFaq(action) {
 		yield put({ type: 'ADD_FAQ_SUCCESS', payload: res.data });
 		yield* getDataFaq();
 		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* delFaq(action) {
@@ -404,9 +363,7 @@ function* delFaq(action) {
 		yield put({ type: 'DELETE_FAQ_SUCCESS', payload: res.data });
 		yield* getDataFaq();
 		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* getDetailFaq(action) {
@@ -423,9 +380,7 @@ function* getDetailFaq(action) {
 			}
 		);
 		yield put({ type: 'GET_DETAIL_FAQ_SUCCESS', payload: res.data });
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* updateFaq(action) {
@@ -446,9 +401,7 @@ function* updateFaq(action) {
 		yield put({ type: 'UPDATE_FAQ_SUCCESS', payload: res.data });
 		yield* getDataFaq();
 		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 // ARTIKEL
@@ -462,9 +415,7 @@ function* getDataArtikel(action) {
 			},
 		});
 		yield put({ type: 'GET_DATA_ARTIKEL_SUCCESS', payload: res.data });
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* addArtikel(action) {
@@ -480,9 +431,7 @@ function* addArtikel(action) {
 		yield put({ type: 'ADD_ARTIKEL_SUCCESS', payload: res.data });
 		yield* getDataArtikel();
 		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* delArtikel(action) {
@@ -501,9 +450,7 @@ function* delArtikel(action) {
 		yield put({ type: 'DELETE_ARTIKEL_SUCCESS', payload: res.data });
 		yield* getDataArtikel();
 		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* getDetailArtikel(action) {
@@ -520,9 +467,7 @@ function* getDetailArtikel(action) {
 			}
 		);
 		yield put({ type: 'GET_DETAIL_ARTIKEL_SUCCESS', payload: res.data });
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 function* updateArtikel(action) {
@@ -543,9 +488,7 @@ function* updateArtikel(action) {
 		yield put({ type: 'UPDATE_ARTIKEL_SUCCESS', payload: res.data });
 		yield* getDataArtikel();
 		// window.location.href = process.env.PUBLIC_URL + '/supplier/kelolaproduk';
-	} catch (e) {
-		console.log(e);
-	}
+	} catch (e) {}
 }
 
 // Watch Order
