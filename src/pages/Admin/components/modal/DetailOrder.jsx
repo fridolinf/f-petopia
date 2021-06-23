@@ -6,11 +6,6 @@ const DetailOrder = (props) => {
 	console.log(data);
 	return (
 		<>
-			{/* <Descriptions bordered layout='horizontal'>
-				<Descriptions.Item className='text-center'>
-					<Image width={'50%'} src={data.id} />
-				</Descriptions.Item>
-			</Descriptions> */}
 			<Col>
 				<hr />
 				<div>DATA PESANAN</div>

@@ -1,16 +1,17 @@
 import React from 'react';
-import { Tabs, Table, Tag, Space } from 'antd';
+import { Tabs, Table, Tag, Space, Modal, Button } from 'antd';
 import {
 	getOrderNewList,
 	confirmOrder,
 	getOrderSentList,
+	getDetailOrder,
 } from '../../../../redux/admin/action/actionAdmin';
 import { connect } from 'react-redux';
 import UIBlocker from 'react-ui-blocker';
 import swal from 'sweetalert';
 import moment from 'moment';
 import 'moment/locale/id';
-
+import DetailOrder from './modal/DetailOrder';
 export const sorter1 = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
 
@@ -20,10 +21,29 @@ class TabPesananBaru extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			isModalDetailOrder: false,
 			loading: false,
+			id: '',
 		};
 	}
 	state = { size: 'small' };
+
+	showDetail = (id) => {
+		this.setState({ isModalDetailOrder: true, id: id });
+		this.props.getDetailOrder(id);
+	};
+
+	handleOk = () => {
+		this.setState({
+			isModalDetailOrder: false,
+		});
+	};
+
+	handleCancel = () => {
+		this.setState({
+			isModalDetailOrder: false,
+		});
+	};
 
 	confirmNotif = (id) => {
 		swal({
@@ -50,7 +70,7 @@ class TabPesananBaru extends React.Component {
 	};
 
 	render() {
-		const { size } = this.state;
+		const { isModalDetailOrder } = this.state;
 
 		const columnPesananBaru = [
 			{
@@ -111,7 +131,15 @@ class TabPesananBaru extends React.Component {
 				key: 'Aksi',
 				render: (text, record) => (
 					<Space size='small' direction='vertical'>
-						<button className='btn btn-info'>Detail</button>
+						<button
+							className='btn btn-info'
+							onClick={(e) => {
+								e.stopPropagation();
+								this.showDetail(record.id);
+							}}
+						>
+							Detail
+						</button>
 						<button
 							className='btn btn-primary'
 							onClick={(e) => {
@@ -140,17 +168,32 @@ class TabPesananBaru extends React.Component {
 					dataSource={this.props.newOrders}
 					scroll={{ x: 1300 }}
 				/>
+				{/* Modal Detail  */}
+				<Modal
+					width='50%'
+					title='Detail Order'
+					visible={isModalDetailOrder}
+					footer={
+						<Button key='back' onClick={this.handleCancel}>
+							Tutup
+						</Button>
+					}
+					closable={null}
+				>
+					<DetailOrder data={this.props.detailOrder} />
+				</Modal>
 			</div>
 		);
 	}
 }
 const mapStateToProps = (state) => {
-	const { newOrders, loading, error } = state.reducerAdmin;
+	const { newOrders, detailOrder, loading, error } = state.reducerAdmin;
 	const { user } = state.reducerSupplier;
-	return { newOrders, user, loading, error };
+	return { newOrders, user, detailOrder, loading, error };
 };
 export default connect(mapStateToProps, {
 	getOrderNewList,
 	confirmOrder,
 	getOrderSentList,
+	getDetailOrder,
 })(TabPesananBaru);

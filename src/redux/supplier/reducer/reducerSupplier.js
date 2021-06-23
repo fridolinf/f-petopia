@@ -23,6 +23,7 @@ const initialState = {
 		countInStock: '',
 		dateCreated: '',
 	},
+	detailOrder: {},
 	totalPrice: 0,
 	totalQuantity: 0,
 	faqs: [],
@@ -198,6 +199,34 @@ const reducerSupplier = (state = initialState, action) => {
 				...state,
 				loading: false,
 				suppliers: {},
+				error: null,
+			};
+		case 'REQUEST_DETAIL_ORDER':
+			return {
+				...state,
+				loading: true,
+				detailOrder: {},
+				error: null,
+			};
+		case 'GET_DETAIL_ORDER_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				detailOrder: {
+					...state.detailOrder,
+					id: action.payload.id,
+					payment: action.payload.payment,
+					name: action.payload.user.name,
+					quantity: action.payload.quantity,
+					totalPrice: action.payload.totalPrice,
+					address: action.payload.address,
+					marketName: action.payload.orderItems[0].product.market.marketName,
+					marketAddress: action.payload.orderItems[0].product.market.alamatToko,
+					produk: action.payload.orderItems[0].product.name,
+					gambar: action.payload.orderItems[0].product.image1,
+					phone: action.payload.phone,
+					dateOrdered: action.payload.dateOrdered,
+				},
 				error: null,
 			};
 	}
