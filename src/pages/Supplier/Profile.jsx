@@ -9,6 +9,7 @@ import cobasvg from '../../assets/images/coba.svg';
 import { connect } from 'react-redux';
 import UIBlocker from 'react-ui-blocker';
 import { Col } from 'reactstrap';
+import gambar from '../../assets/images/logo.jpeg';
 
 class Profile extends React.Component {
 	constructor(props) {
@@ -87,7 +88,11 @@ class Profile extends React.Component {
 								onFinish={this.onSubmitHandlerEdit}
 							>
 								<div className='text-center mx-auto'>
-									<Image src={this.state.image} width={250} height={250} />
+									{this.state.image ? (
+										<Image src={this.state.image} width={250} height={250} />
+									) : (
+										<Image src={gambar} width={250} height={250} />
+									)}
 								</div>
 								<Form.Item label='Nama'>
 									<Form.Item
