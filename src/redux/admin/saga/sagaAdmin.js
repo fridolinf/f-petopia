@@ -515,7 +515,6 @@ function* getCountMarket(action) {
 			},
 		});
 		yield put({ type: 'GET_COUNT_MARKET_SUCCESS', payload: res.data });
-		console.log(res.data);
 	} catch (e) {}
 }
 
