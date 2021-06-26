@@ -31,6 +31,7 @@ class DashboardAdmin extends Component {
 	componentDidMount() {
 		this.props.getSuccessTransaction();
 		this.props.getCountUser();
+		this.props.getCountMarket();
 	}
 
 	render() {
