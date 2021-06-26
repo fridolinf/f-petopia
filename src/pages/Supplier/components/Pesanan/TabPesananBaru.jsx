@@ -46,19 +46,17 @@ class TabPesananBaru extends React.Component {
 	confirmNotif = (id) => {
 		swal({
 			title: 'Apakah anda yakin?',
-			text: 'Pesanan akan dikirim!',
+			text: 'Pesanan akan diterima!',
 			icon: 'warning',
 			buttons: true,
 			dangerMode: true,
 		}).then((willDelete) => {
 			if (willDelete) {
 				this.props.confirmOrder(id);
-				swal('Pesanan berhasil dikirim', {
+				swal('Pesanan berhasil diterima', {
 					icon: 'success',
 				});
-				window.location.href =
-					process.env.PUBLIC_URL + '/supplier/kelolapesanan';
-				this.props.getOrderNewList();
+				this.props.getOrderSentList();
 			} else {
 				swal('baik terimakasih', {
 					icon: 'success',

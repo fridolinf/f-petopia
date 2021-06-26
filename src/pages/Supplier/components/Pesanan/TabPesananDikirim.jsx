@@ -4,6 +4,7 @@ import { Tabs, Table, Tag, Space, Input } from 'antd';
 import {
 	getOrderSentList,
 	sentOrder,
+	getOrderDoneList,
 } from '../../../../redux/admin/action/actionAdmin';
 import { connect } from 'react-redux';
 import UIBlocker from 'react-ui-blocker';
@@ -32,9 +33,7 @@ class TabPesananDikirim extends React.Component {
 				swal('Pesanan berhasil dikirim', {
 					icon: 'success',
 				});
-				window.location.href =
-					process.env.PUBLIC_URL + '/supplier/kelolapesanan';
-				this.props.getOrderSentList();
+				this.props.getOrderDoneList();
 			} else {
 				swal('baik terimakasih', {
 					icon: 'success',
@@ -146,4 +145,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
 	getOrderSentList,
 	sentOrder,
+	getOrderDoneList,
 })(TabPesananDikirim);

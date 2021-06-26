@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Layout, Menu, Avatar, Typography, Button } from 'antd';
+import { Layout, Menu, Typography, Button } from 'antd';
 import {
 	MenuUnfoldOutlined,
 	MenuFoldOutlined,

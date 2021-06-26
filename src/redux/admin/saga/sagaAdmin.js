@@ -142,6 +142,7 @@ function* confirmOrder(action) {
 				},
 			}
 		);
+		yield* getOrderNewList();
 		yield put({ type: 'GET_CONFIRM_ORDER_SUCCESS', payload: res.data });
 	} catch (e) {}
 }
@@ -162,6 +163,7 @@ function* sentOrder(action) {
 				},
 			}
 		);
+		yield* getOrderSentList();
 		yield put({ type: 'GET_SENT_ORDER_SUCCESS', payload: res.data });
 	} catch (e) {}
 }
@@ -500,9 +502,8 @@ function* getCountUser(action) {
 				Authorization: 'Bearer ' + token,
 			},
 		});
-		// const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
-		// yield call(delay, 1000);
 		yield put({ type: 'GET_COUNT_USER_SUCCESS', payload: res.data });
+		console.log(res.data);
 	} catch (e) {}
 }
 

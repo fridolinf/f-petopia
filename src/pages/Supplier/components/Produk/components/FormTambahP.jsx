@@ -115,6 +115,10 @@ const FormTambahP = (props) => {
 								min: 7,
 								message: 'Nama Produk harus lebih dari 7 huruf',
 							},
+							{
+								max: 30,
+								message: 'Nama Maks 30 huruf!',
+							},
 						]}
 						a
 					>

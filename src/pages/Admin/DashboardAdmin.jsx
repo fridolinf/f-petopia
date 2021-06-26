@@ -29,12 +29,11 @@ class DashboardAdmin extends Component {
 
 	componentDidMount() {
 		this.props.getSuccessTransaction();
+		this.props.getCountUser();
 	}
 
 	render() {
-		const { successTransaction } = this.props;
-		console.log(getCountUser);
-		console.log(this.props.allUser);
+		const { successTransaction, allUser } = this.props;
 		return (
 			<div>
 				<UIBlocker
@@ -68,14 +67,13 @@ class DashboardAdmin extends Component {
 						>
 							<Descriptions
 								column={{ xxl: 4, xl: 1, lg: 3, md: 3, sm: 2, xs: 1 }}
-								title='Total Pendapatan'
+								title='Total USER'
 								layout='vertical'
 								bordered
 							>
 								<Descriptions.Item>
 									<p style={{ fontSize: '2em', fontWeight: 'bold' }}>
-										{'Rp'}
-										{this.props.allUser}
+										{allUser}
 									</p>
 								</Descriptions.Item>
 							</Descriptions>
