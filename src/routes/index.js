@@ -17,6 +17,7 @@ import Faq from '../pages/Supplier/Faq';
 import LihatTransaksi from '../pages/Admin/components/LihatTransaksi';
 import { connect } from 'react-redux';
 import PrivateRoutes from './PrivateRoutes';
+import VerifPayment from '../pages/Supplier/VerifPayment';
 
 class index extends Component {
 	render() {
@@ -24,6 +25,7 @@ class index extends Component {
 			<Router>
 				<Switch>
 					<Route path='/login' component={Login} />
+					<Route path='/verifPayment' component={VerifPayment} />
 					<PrivateRoutes exact path='/' component={Login} />
 					<PrivateRoutes path='/supplier/:path?' roles={['2']} exact>
 						<LayoutSupplier>
