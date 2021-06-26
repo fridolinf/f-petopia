@@ -93,3 +93,6 @@ export const getAllTransactions = () => {
 export const getCountUser = () => {
 	return { type: 'REQUEST_COUNT_USER' };
 };
+export const getCountMarket = () => {
+	return { type: 'REQUEST_COUNT_MARKET' };
+};

@@ -503,6 +503,18 @@ function* getCountUser(action) {
 			},
 		});
 		yield put({ type: 'GET_COUNT_USER_SUCCESS', payload: res.data });
+	} catch (e) {}
+}
+function* getCountMarket(action) {
+	const token = getLoggedInUser().token;
+	try {
+		const res = yield axios.get(`${api.countMarket}`, {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + token,
+			},
+		});
+		yield put({ type: 'GET_COUNT_MARKET_SUCCESS', payload: res.data });
 		console.log(res.data);
 	} catch (e) {}
 }
@@ -600,8 +612,11 @@ function* watchUpdateArtikel() {
 }
 
 // COUNT
-function* watchgetCountUser() {
+function* watchGetCountUser() {
 	yield takeEvery('REQUEST_COUNT_USER', getCountUser);
+}
+function* watchGetCountMarket() {
+	yield takeEvery('REQUEST_COUNT_MARKET', getCountMarket);
 }
 
 // YIELD
@@ -633,7 +648,8 @@ function* adminSaga() {
 		fork(watchSuccessTransaction),
 		fork(watchAllTransactions),
 		fork(watchDetailOrder),
-		fork(watchgetCountUser),
+		fork(watchGetCountUser),
+		fork(watchGetCountMarket),
 	]);
 }
 export default adminSaga;

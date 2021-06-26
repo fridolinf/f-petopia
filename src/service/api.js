@@ -5,6 +5,7 @@ export const api = {
 	getUser: (id) => `${baseUrl}/users/${id}`,
 	delUser: (id) => `${baseUrl}/kelolauser/${id}`,
 	countUser: `${baseUrl}/users/get/count`,
+	countMarket: `${baseUrl}/markets/get/count`,
 
 	// SUPPLIER
 	getSupplierDetail: (id) => `${baseUrl}/kelolauser/detail/${id}`,

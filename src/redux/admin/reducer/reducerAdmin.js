@@ -6,6 +6,7 @@ const initialState = {
 	detailOrder: {},
 	successTransaction: [],
 	allUser: 0,
+	allMarkets: 0,
 	totalT: 0,
 	allTransactions: [],
 	completeOrders: [],
@@ -424,6 +425,13 @@ const reducerAdmin = (state = initialState, action) => {
 				...state,
 				loading: false,
 				allUser: action.payload.userCount,
+				error: null,
+			};
+		case 'GET_COUNT_MARKET_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				allMarkets: action.payload.marketCount,
 				error: null,
 			};
 	}
