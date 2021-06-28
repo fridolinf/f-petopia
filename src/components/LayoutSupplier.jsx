@@ -8,6 +8,7 @@ import {
 	DashboardOutlined,
 	ShoppingCartOutlined,
 	ShopOutlined,
+	HistoryOutlined,
 } from '@ant-design/icons';
 import { session } from '../utils/session';
 import { getDataSupplier } from '../redux/supplier/action/actionSupplier';
@@ -40,6 +41,12 @@ const menuPindah = [
 		label: 'KelolaProduk',
 		path: '/supplier/kelolaproduk',
 		icon: <ShopOutlined />,
+	},
+	{
+		key: '6',
+		label: 'History',
+		path: '/supplier/history',
+		icon: <HistoryOutlined />,
 	},
 ];
 

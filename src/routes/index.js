@@ -18,6 +18,7 @@ import LihatTransaksi from '../pages/Admin/components/LihatTransaksi';
 import { connect } from 'react-redux';
 import PrivateRoutes from './PrivateRoutes';
 import VerifPayment from '../pages/Supplier/VerifPayment';
+import History from '../pages/Supplier/History';
 
 class index extends Component {
 	render() {
@@ -61,6 +62,11 @@ class index extends Component {
 									path='/supplier/faq'
 									roles={['2']}
 									component={Faq}
+								/>
+								<PrivateRoutes
+									path='/supplier/history'
+									roles={['2']}
+									component={History}
 								/>
 							</Switch>
 						</LayoutSupplier>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Table, Tag, Space, Modal, Button } from 'antd';
+import { Table, Tag, Space, Modal, Button } from 'antd';
 import {
 	getOrderNewList,
 	confirmOrder,
