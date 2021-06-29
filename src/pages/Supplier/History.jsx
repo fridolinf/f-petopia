@@ -1,7 +1,6 @@
 import React from 'react';
-import { Tabs, Table, Tag, Card, Rate, Row, Col } from 'antd';
+import { Card, Rate, Row, Col } from 'antd';
 import UIBlocker from 'react-ui-blocker';
-import swal from 'sweetalert';
 import moment from 'moment';
 import 'moment/locale/id';
 import { getOrderDoneList } from '../../redux/admin/action/actionAdmin';
@@ -11,6 +10,12 @@ export const sorter1 = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
 
 class History extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			loading: false,
+		};
+	}
 	state = { size: 'small' };
 
 	componentDidMount() {
@@ -22,10 +27,11 @@ class History extends React.Component {
 			<ul>
 				{this.props.doneOrders.map((doneOrders) => (
 					<Card
-						className='mt-2 text-center'
+						className='mt-3 text-center'
 						style={{ width: '500px' }}
 						key={doneOrders.id}
-						title={doneOrders.orderItems[0].product.category.name}
+						title={doneOrders.orderItems[0].product.category.name.toUpperCase()}
+						hoverable={true}
 					>
 						<p>{doneOrders.user.name}</p>
 						<p>{doneOrders.orderItems[0].product.name}</p>
@@ -45,7 +51,7 @@ class History extends React.Component {
 				<UIBlocker
 					theme='bounce' // default
 					message=''
-					loading={this.state.loading}
+					loading={this.props.loading}
 				/>
 				<h3>Riwayat Pemesanan</h3>
 				<Row className='mt-5'>
