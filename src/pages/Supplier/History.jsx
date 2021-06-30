@@ -38,7 +38,7 @@ class History extends React.Component {
 						<Rate
 							className='mr-3'
 							disabled
-							value={doneOrders.orderItems[0].product.Quantityrating}
+							value={doneOrders.orderItems[0].product.avgRating}
 						></Rate>
 						{moment(doneOrders.dateOrdered).format('LL')}
 					</Card>
