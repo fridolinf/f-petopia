@@ -12,6 +12,7 @@ import swal from 'sweetalert';
 import moment from 'moment';
 import 'moment/locale/id';
 import DetailOrder from '../../../Admin/components/modal/DetailOrder';
+import Text from 'antd/lib/typography/Text';
 export const sorter1 = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
 
@@ -119,6 +120,19 @@ class TabPesananBaru extends React.Component {
 				key: 'dateOrdered',
 				render: (text) => moment(text).format('LLLL'),
 				sorter: (a, b) => sorter1(a.dateOrdered, b.dateOrdered),
+				sortDirections: ['descend', 'ascend'],
+			},
+			{
+				title: 'Tanggal Penjemputan',
+				dataIndex: 'tanggalPenjemputan',
+				key: 'tanggalPenjemputan',
+				render: (text, record) =>
+					record.tanggalPenjemputan ? (
+						moment(text).format('LLLL')
+					) : (
+						<Text disabled>Kosong</Text>
+					),
+				sorter: (a, b) => sorter1(a.tanggalPenjemputan, b.tanggalPenjemputan),
 				sortDirections: ['descend', 'ascend'],
 			},
 			{

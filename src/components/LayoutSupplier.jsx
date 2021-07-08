@@ -9,6 +9,7 @@ import {
 	ShoppingCartOutlined,
 	ShopOutlined,
 	HistoryOutlined,
+	WechatOutlined,
 } from '@ant-design/icons';
 import { session } from '../utils/session';
 import { getDataSupplier } from '../redux/supplier/action/actionSupplier';

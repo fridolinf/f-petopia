@@ -11,6 +11,7 @@ import UIBlocker from 'react-ui-blocker';
 import swal from 'sweetalert';
 import moment from 'moment';
 import 'moment/locale/id';
+import Text from 'antd/lib/typography/Text';
 
 export const sorter1 = (a, b) =>
 	isNaN(a) && isNaN(b) ? (a || '').localeCompare(b || '') : a - b;
@@ -91,11 +92,16 @@ class TabPesananDikirim extends React.Component {
 				key: 'phone',
 			},
 			{
-				title: 'Tanggal Order',
-				dataIndex: 'dateOrdered',
-				key: 'dateOrdered',
-				render: (text) => moment(text).format('LLLL'),
-				sorter: (a, b) => sorter1(a.dateOrdered, b.dateOrdered),
+				title: 'Tanggal Penjemputan',
+				dataIndex: 'tanggalPenjemputan',
+				key: 'tanggalPenjemputan',
+				render: (text, record) =>
+					record.tanggalPenjemputan ? (
+						moment(text).format('LLLL')
+					) : (
+						<Text disabled>Kosong</Text>
+					),
+				sorter: (a, b) => sorter1(a.tanggalPenjemputan, b.tanggalPenjemputan),
 				sortDirections: ['descend', 'ascend'],
 			},
 			{
